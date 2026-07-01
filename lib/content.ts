@@ -50,6 +50,50 @@ export const features: Feature[] = [
   },
 ];
 
+export type Screenshot = {
+  /** Dateiname in public/ – erscheint automatisch, sobald vorhanden. */
+  file: string;
+  width: number;
+  height: number;
+  eyebrow: string;
+  title: string;
+  description: string;
+};
+
+/**
+ * App-Einblicke als alternierende Reihen.
+ * Noch fehlende Screenshots werden als Platzhalter dargestellt.
+ */
+export const screenshots: Screenshot[] = [
+  {
+    file: "screen1.png",
+    width: 1503,
+    height: 834,
+    eyebrow: "Überblick",
+    title: "Alles Wichtige auf einen Blick",
+    description:
+      "Das Dashboard zeigt offene Bestellungen, den Versandstatus deiner Kunden und internationale Sendungen mit Zollbedarf – live und sortiert.",
+  },
+  {
+    file: "screen2.png",
+    width: 1503,
+    height: 834,
+    eyebrow: "Bestellungen",
+    title: "Aufträge automatisch synchronisiert",
+    description:
+      "Bestellungen laufen direkt aus deinem Shop ein. Filtere nach Status, Land oder Carrier und bearbeite den Versand im Stapel.",
+  },
+  {
+    file: "screen3.png",
+    width: 1503,
+    height: 834,
+    eyebrow: "Label & Zoll",
+    title: "Label und Zollpapiere in einem Schritt",
+    description:
+      "Carrier wählen, Label erzeugen, Zollformulare automatisch beilegen – und direkt an den Drucker senden. Ohne Medienbruch.",
+  },
+];
+
 export type Extra = {
   icon: Icon;
   title: string;
