@@ -35,6 +35,15 @@ export const metadata: Metadata = {
     "E-Commerce Versand",
   ],
   authors: [{ name: "VENTRHA" }],
+  icons: {
+    icon: [
+      { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon-64.png", sizes: "64x64", type: "image/png" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    shortcut: "/icon.ico",
+    apple: "/icon.png",
+  },
   openGraph: {
     type: "website",
     locale: "de_DE",
