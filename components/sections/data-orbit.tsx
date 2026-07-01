@@ -21,7 +21,7 @@ type Ring = {
 const rings: Ring[] = [
   {
     radius: 44,
-    radiusSm: 38,
+    radiusSm: 37,
     duration: 64,
     items: [
       { label: "DHL", angle: 0, accent: true },
@@ -40,8 +40,8 @@ function Chip({ item }: { item: OrbitItem }) {
     <div
       className={`flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-[11px] font-semibold backdrop-blur sm:gap-2 sm:px-4 sm:py-2 sm:text-sm ${
         item.accent
-          ? "border-accent/40 bg-accent-soft/80 text-foreground shadow-[0_0_22px_-4px_var(--accent)]"
-          : "border-border-strong bg-surface/80 text-muted"
+          ? "border-accent/40 bg-accent-soft/90 text-foreground shadow-[0_0_22px_-4px_var(--accent)]"
+          : "border-border-strong bg-surface/90 text-muted"
       }`}
     >
       <span
@@ -85,17 +85,34 @@ export function DataOrbit() {
           className="relative mx-auto mt-16 aspect-square w-full max-w-[900px]"
         >
           <div className="absolute inset-0">
-            {/* Statische Orbit-Bahnen */}
-            <div
-              aria-hidden
-              className="absolute left-1/2 top-1/2 h-[76%] w-[76%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-border/60 sm:h-[88%] sm:w-[88%]"
-            />
-            <div
-              aria-hidden
-              className="absolute left-1/2 top-1/2 h-[48%] w-[48%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-border/50 sm:h-[72%] sm:w-[72%]"
-            />
+            {/* Weltkugel (füllt die Bühne) + Logo im Kern – hinter den Chips */}
+            <div className="absolute left-1/2 top-1/2 flex aspect-square w-[96%] -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+              <div
+                aria-hidden
+                className="orbit-core-glow absolute inset-[-6%] rounded-full"
+                style={{
+                  background: "var(--gradient-accent)",
+                  filter: "blur(60px)",
+                }}
+              />
+              <Globe className="relative h-full w-full" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div
+                  aria-hidden
+                  className="absolute h-[36%] w-[36%] rounded-full bg-background/55 blur-lg"
+                />
+                <Image
+                  src="/icon-marketing-dark.png"
+                  alt="VENTRHA"
+                  width={420}
+                  height={420}
+                  priority
+                  className="relative w-[40%]"
+                />
+              </div>
+            </div>
 
-            {/* Rotierende Ringe mit Chips */}
+            {/* Rotierende Marken-Chips – über dem Kugelrand */}
             {rings.map((ring, ri) => (
               <div
                 key={ri}
@@ -141,33 +158,6 @@ export function DataOrbit() {
                 ))}
               </div>
             ))}
-
-            {/* Zentrum: halbtransparente Weltkugel mit Logo davor */}
-            <div className="absolute left-1/2 top-1/2 flex aspect-square w-[46%] -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:w-[70%]">
-              <div
-                aria-hidden
-                className="orbit-core-glow absolute inset-[-12%] rounded-full"
-                style={{
-                  background: "var(--gradient-accent)",
-                  filter: "blur(52px)",
-                }}
-              />
-              <Globe className="relative h-full w-full" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div
-                  aria-hidden
-                  className="absolute h-[44%] w-[44%] rounded-full bg-background/60 blur-lg"
-                />
-                <Image
-                  src="/icon-marketing-dark.png"
-                  alt="VENTRHA"
-                  width={360}
-                  height={360}
-                  priority
-                  className="relative w-[48%]"
-                />
-              </div>
-            </div>
           </div>
         </Reveal>
       </Container>
