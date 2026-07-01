@@ -10,32 +10,27 @@ type OrbitItem = {
 };
 
 type Ring = {
-  radius: number; // % der Bühnenbreite
+  radius: number; // % der Bühnenbreite (Desktop)
+  radiusSm: number; // % der Bühnenbreite (Mobile)
   duration: number; // Sekunden pro Umlauf
   reverse?: boolean; // Umlaufrichtung
   items: OrbitItem[];
 };
 
-// Carrier & Shop-Systeme, die um VENTRHA kreisen.
+// Carrier & Shop-Systeme, die auf einem Ring um die Erde kreisen.
 const rings: Ring[] = [
   {
-    radius: 40,
-    duration: 48,
+    radius: 44,
+    radiusSm: 38,
+    duration: 64,
     items: [
       { label: "DHL", angle: 0, accent: true },
-      { label: "UPS", angle: 90 },
-      { label: "FedEx", angle: 180 },
-      { label: "WooCommerce", angle: 270, accent: true },
-    ],
-  },
-  {
-    radius: 28,
-    duration: 34,
-    reverse: true,
-    items: [
-      { label: "GLS", angle: 60 },
-      { label: "Shopify", angle: 180, accent: true },
-      { label: "Wix", angle: 300 },
+      { label: "UPS", angle: 51 },
+      { label: "Shopify", angle: 103, accent: true },
+      { label: "Wix", angle: 154 },
+      { label: "WooCommerce", angle: 206, accent: true },
+      { label: "FedEx", angle: 257 },
+      { label: "GLS", angle: 309 },
     ],
   },
 ];
@@ -43,7 +38,7 @@ const rings: Ring[] = [
 function Chip({ item }: { item: OrbitItem }) {
   return (
     <div
-      className={`flex items-center gap-2 whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold backdrop-blur ${
+      className={`flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-[11px] font-semibold backdrop-blur sm:gap-2 sm:px-4 sm:py-2 sm:text-sm ${
         item.accent
           ? "border-accent/40 bg-accent-soft/80 text-foreground shadow-[0_0_22px_-4px_var(--accent)]"
           : "border-border-strong bg-surface/80 text-muted"
@@ -87,17 +82,17 @@ export function DataOrbit() {
 
         <Reveal
           delay={0.1}
-          className="relative mx-auto mt-16 aspect-square w-full max-w-[560px]"
+          className="relative mx-auto mt-16 aspect-square w-full max-w-[900px]"
         >
-          <div className="absolute inset-0 origin-center scale-[0.78] sm:scale-100">
+          <div className="absolute inset-0">
             {/* Statische Orbit-Bahnen */}
             <div
               aria-hidden
-              className="absolute left-1/2 top-1/2 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-border/60"
+              className="absolute left-1/2 top-1/2 h-[76%] w-[76%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-border/60 sm:h-[88%] sm:w-[88%]"
             />
             <div
               aria-hidden
-              className="absolute left-1/2 top-1/2 h-[52%] w-[52%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-border/50"
+              className="absolute left-1/2 top-1/2 h-[48%] w-[48%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-border/50 sm:h-[72%] sm:w-[72%]"
             />
 
             {/* Rotierende Ringe mit Chips */}
@@ -117,10 +112,13 @@ export function DataOrbit() {
                   <div
                     key={item.label}
                     className="orbit-arm"
-                    style={{
-                      width: `${ring.radius}%`,
-                      transform: `rotate(${item.angle}deg)`,
-                    }}
+                    style={
+                      {
+                        "--orbit-r": `${ring.radius}%`,
+                        "--orbit-r-sm": `${ring.radiusSm}%`,
+                        transform: `rotate(${item.angle}deg)`,
+                      } as React.CSSProperties
+                    }
                   >
                     <div className="orbit-chip-pos">
                       <div
@@ -145,28 +143,28 @@ export function DataOrbit() {
             ))}
 
             {/* Zentrum: halbtransparente Weltkugel mit Logo davor */}
-            <div className="absolute left-1/2 top-1/2 flex aspect-square w-[48%] -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+            <div className="absolute left-1/2 top-1/2 flex aspect-square w-[46%] -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:w-[70%]">
               <div
                 aria-hidden
-                className="orbit-core-glow absolute inset-[-14%] rounded-full"
+                className="orbit-core-glow absolute inset-[-12%] rounded-full"
                 style={{
                   background: "var(--gradient-accent)",
-                  filter: "blur(46px)",
+                  filter: "blur(52px)",
                 }}
               />
               <Globe className="relative h-full w-full" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div
                   aria-hidden
-                  className="absolute h-[30%] w-[30%] rounded-full bg-background/70 blur-md"
+                  className="absolute h-[44%] w-[44%] rounded-full bg-background/60 blur-lg"
                 />
                 <Image
                   src="/icon-marketing-dark.png"
                   alt="VENTRHA"
-                  width={200}
-                  height={200}
+                  width={360}
+                  height={360}
                   priority
-                  className="relative w-[30%]"
+                  className="relative w-[48%]"
                 />
               </div>
             </div>

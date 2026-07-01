@@ -148,13 +148,20 @@ body {
   will-change: transform;
 }
 
-/* Arm vom Zentrum nach außen; Breite = Radius (in % der Bühne). */
+/* Arm vom Zentrum nach außen; Breite = Radius (in % der Bühne).
+   Radius ist responsiv: --orbit-r-sm auf Mobile, --orbit-r ab sm. */
 .orbit-arm {
   position: absolute;
   left: 50%;
   top: 50%;
   height: 0;
+  width: var(--orbit-r-sm, 40%);
   transform-origin: 0 0;
+}
+@media (min-width: 640px) {
+  .orbit-arm {
+    width: var(--orbit-r, 44%);
+  }
 }
 
 /* Chip sitzt am äußeren Ende des Arms und wird auf diesen Punkt zentriert. */
