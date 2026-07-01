@@ -61,8 +61,8 @@ const ROUTES = PAIRS.map(([ai, bi]) => {
 
 const graticule = geoGraticule().step([20, 20])();
 const HALF_PI = Math.PI / 2;
-const RUST = "hsla(20, 92%, 56%, 1)";
-const LILA = "hsla(278, 85%, 67%, 1)";
+const RUST = "hsla(16, 95%, 54%, 1)";
+const LILA = "hsla(287, 80%, 69%, 1)";
 
 export function Globe({ className = "" }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -172,9 +172,20 @@ export function Globe({ className = "" }: { className?: string }) {
         ctx.lineWidth = 0.7;
         ctx.stroke();
 
-        // Farbe des Impulses: meist Blau/Cyan, gelegentlich Rost, dann Lila.
-        const cyc = (t / 1000 + i * 2.3) % 20;
-        const col = cyc < 2.4 ? RUST : cyc >= 10 && cyc < 12.4 ? LILA : lineBright(1);
+        // Farbe des Impulses: meist Blau/Cyan; nur wenige Routen blitzen
+        // gelegentlich in Rost bzw. Lila auf (seltener, mit Glow).
+        let col = lineBright(1);
+        let colored = false;
+        if (i % 4 === 0) {
+          const cyc = (t / 1000 + i * 5) % 32;
+          if (cyc < 1.6) {
+            col = RUST;
+            colored = true;
+          } else if (cyc >= 16 && cyc < 17.6) {
+            col = LILA;
+            colored = true;
+          }
+        }
 
         const period = 2600;
         const off = (((t + i * 430) % period) / period) * 420;
@@ -183,9 +194,9 @@ export function Globe({ className = "" }: { className?: string }) {
         ctx.setLineDash([7, 420]);
         ctx.lineDashOffset = -off;
         ctx.strokeStyle = col;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = colored ? 2.2 : 1.8;
         ctx.shadowColor = col;
-        ctx.shadowBlur = 6;
+        ctx.shadowBlur = colored ? 9 : 0;
         ctx.stroke();
         ctx.shadowBlur = 0;
       }
