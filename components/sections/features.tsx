@@ -1,11 +1,12 @@
 import { Container } from "@/components/container";
+import { Reveal, Stagger, StaggerItem } from "@/components/reveal";
 import { features, extras } from "@/lib/content";
 
 export function Features() {
   return (
     <section id="features" className="border-b border-border py-28 sm:py-40">
       <Container>
-        <div className="mx-auto max-w-3xl text-center">
+        <Reveal className="mx-auto max-w-3xl text-center">
           <span className="eyebrow text-accent">Funktionen</span>
           <h2 className="font-display mt-5 text-balance text-4xl font-extrabold leading-[1.02] text-foreground sm:text-5xl lg:text-6xl">
             Alles für den Versand –<br className="hidden sm:block" /> in einer
@@ -15,13 +16,13 @@ export function Features() {
             VENTRHA übernimmt die wiederkehrenden Handgriffe im Versand, damit du
             dich um dein Geschäft kümmern kannst.
           </p>
-        </div>
+        </Reveal>
 
-        <div className="mt-16 grid gap-6 sm:grid-cols-2">
+        <Stagger className="mt-16 grid gap-6 sm:grid-cols-2">
           {features.map((feature) => (
-            <div
+            <StaggerItem
               key={feature.title}
-              className="group rounded-2xl border border-border bg-surface p-7 transition-colors hover:border-border-strong"
+              className="group h-full rounded-2xl border border-border bg-surface p-7 transition-colors hover:border-border-strong"
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-border-strong bg-accent-soft text-accent">
                 <feature.icon />
@@ -41,15 +42,15 @@ export function Features() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
 
-        <div className="mt-6 grid gap-6 sm:grid-cols-3">
+        <Stagger className="mt-6 grid gap-6 sm:grid-cols-3">
           {extras.map((extra) => (
-            <div
+            <StaggerItem
               key={extra.title}
-              className="flex gap-4 rounded-2xl border border-border bg-surface/60 p-6"
+              className="flex h-full gap-4 rounded-2xl border border-border bg-surface/60 p-6"
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border-strong text-muted">
                 <extra.icon width={20} height={20} />
@@ -60,9 +61,9 @@ export function Features() {
                   {extra.description}
                 </p>
               </div>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </Container>
     </section>
   );

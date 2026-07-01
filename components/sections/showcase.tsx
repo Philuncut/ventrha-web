@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { Container } from "@/components/container";
 import { AppWindow } from "@/components/app-window";
+import { Reveal } from "@/components/reveal";
 import { screenshots } from "@/lib/content";
 
 /** Prüft zur Build-Zeit, ob ein Screenshot in public/ liegt. */
@@ -34,7 +35,7 @@ export function Showcase() {
   return (
     <section id="einblicke" className="border-b border-border py-28 sm:py-40">
       <Container>
-        <div className="mx-auto max-w-3xl text-center">
+        <Reveal className="mx-auto max-w-3xl text-center">
           <span className="eyebrow text-accent">Einblicke</span>
           <h2 className="font-display mt-5 text-balance text-4xl font-extrabold leading-[1.02] text-foreground sm:text-5xl lg:text-6xl">
             Ein Blick in die App
@@ -43,7 +44,7 @@ export function Showcase() {
             VENTRHA ist eine Desktop-Anwendung für Windows – aufgeräumt,
             schnell und auf den Versandalltag zugeschnitten.
           </p>
-        </div>
+        </Reveal>
 
         <div className="mt-20 flex flex-col gap-20 sm:gap-32">
           {screenshots.map((shot, i) => {
@@ -54,7 +55,7 @@ export function Showcase() {
                 key={shot.file}
                 className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14"
               >
-                <div className={reversed ? "lg:order-2" : ""}>
+                <Reveal className={reversed ? "lg:order-2" : ""}>
                   <span className="eyebrow text-accent">{shot.eyebrow}</span>
                   <h3 className="font-display mt-4 text-3xl font-extrabold leading-[1.05] text-foreground sm:text-4xl">
                     {shot.title}
@@ -62,8 +63,8 @@ export function Showcase() {
                   <p className="mt-5 text-lg leading-8 text-muted">
                     {shot.description}
                   </p>
-                </div>
-                <div className={reversed ? "lg:order-1" : ""}>
+                </Reveal>
+                <Reveal className={reversed ? "lg:order-1" : ""} delay={0.12}>
                   {available ? (
                     <AppWindow
                       src={`/${shot.file}`}
@@ -75,7 +76,7 @@ export function Showcase() {
                   ) : (
                     <PlaceholderWindow title={`VENTRHA – ${shot.eyebrow}`} />
                   )}
-                </div>
+                </Reveal>
               </div>
             );
           })}

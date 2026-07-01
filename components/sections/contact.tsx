@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { Container } from "@/components/container";
+import { Reveal } from "@/components/reveal";
 import { ArrowRightIcon } from "@/components/icons";
 import { site } from "@/lib/site";
 
@@ -41,7 +42,7 @@ export function Contact() {
   return (
     <section id="kontakt" className="py-28 sm:py-40">
       <Container>
-        <div className="ring-gradient grid gap-12 rounded-3xl border border-border bg-surface p-8 sm:p-12 lg:grid-cols-2 lg:gap-16">
+        <Reveal className="ring-gradient grid gap-12 rounded-3xl border border-border bg-surface p-8 sm:p-12 lg:grid-cols-2 lg:gap-16">
           <div>
             <span className="eyebrow text-accent">Kontakt</span>
             <h2 className="font-display mt-5 text-balance text-4xl font-extrabold leading-[1.02] text-foreground sm:text-5xl">
@@ -141,7 +142,7 @@ export function Contact() {
               </p>
             )}
           </form>
-        </div>
+        </Reveal>
       </Container>
     </section>
   );
