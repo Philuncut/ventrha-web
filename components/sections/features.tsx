@@ -3,22 +3,21 @@ import { features, extras } from "@/lib/content";
 
 export function Features() {
   return (
-    <section id="features" className="border-b border-border py-20 sm:py-28">
+    <section id="features" className="border-b border-border py-28 sm:py-40">
       <Container>
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="text-xs font-medium uppercase tracking-wider text-accent">
-            Funktionen
-          </span>
-          <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            Alles für den Versand – in einer Software
+        <div className="mx-auto max-w-3xl text-center">
+          <span className="eyebrow text-accent">Funktionen</span>
+          <h2 className="font-display mt-5 text-balance text-4xl font-extrabold leading-[1.02] text-foreground sm:text-5xl lg:text-6xl">
+            Alles für den Versand –<br className="hidden sm:block" /> in einer
+            Software
           </h2>
-          <p className="mt-4 text-pretty text-lg leading-8 text-muted">
+          <p className="mt-6 text-pretty text-lg leading-8 text-muted sm:text-xl">
             VENTRHA übernimmt die wiederkehrenden Handgriffe im Versand, damit du
             dich um dein Geschäft kümmern kannst.
           </p>
         </div>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2">
+        <div className="mt-16 grid gap-6 sm:grid-cols-2">
           {features.map((feature) => (
             <div
               key={feature.title}
@@ -27,7 +26,7 @@ export function Features() {
               <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-border-strong bg-accent-soft text-accent">
                 <feature.icon />
               </div>
-              <h3 className="mt-5 text-xl font-semibold text-foreground">
+              <h3 className="font-display mt-6 text-2xl font-bold text-foreground">
                 {feature.title}
               </h3>
               <p className="mt-2 leading-7 text-muted">{feature.description}</p>
@@ -46,7 +45,7 @@ export function Features() {
           ))}
         </div>
 
-        <div className="mt-5 grid gap-5 sm:grid-cols-3">
+        <div className="mt-6 grid gap-6 sm:grid-cols-3">
           {extras.map((extra) => (
             <div
               key={extra.title}

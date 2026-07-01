@@ -32,22 +32,20 @@ function PlaceholderWindow({ title }: { title: string }) {
 
 export function Showcase() {
   return (
-    <section id="einblicke" className="border-b border-border py-20 sm:py-28">
+    <section id="einblicke" className="border-b border-border py-28 sm:py-40">
       <Container>
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="text-xs font-medium uppercase tracking-wider text-accent">
-            Einblicke
-          </span>
-          <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+        <div className="mx-auto max-w-3xl text-center">
+          <span className="eyebrow text-accent">Einblicke</span>
+          <h2 className="font-display mt-5 text-balance text-4xl font-extrabold leading-[1.02] text-foreground sm:text-5xl lg:text-6xl">
             Ein Blick in die App
           </h2>
-          <p className="mt-4 text-pretty text-lg leading-8 text-muted">
+          <p className="mt-6 text-pretty text-lg leading-8 text-muted sm:text-xl">
             VENTRHA ist eine Desktop-Anwendung für Windows – aufgeräumt,
             schnell und auf den Versandalltag zugeschnitten.
           </p>
         </div>
 
-        <div className="mt-16 flex flex-col gap-16 sm:gap-24">
+        <div className="mt-20 flex flex-col gap-20 sm:gap-32">
           {screenshots.map((shot, i) => {
             const reversed = i % 2 === 1;
             const available = hasFile(shot.file);
@@ -57,13 +55,11 @@ export function Showcase() {
                 className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14"
               >
                 <div className={reversed ? "lg:order-2" : ""}>
-                  <span className="text-xs font-medium uppercase tracking-wider text-accent">
-                    {shot.eyebrow}
-                  </span>
-                  <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+                  <span className="eyebrow text-accent">{shot.eyebrow}</span>
+                  <h3 className="font-display mt-4 text-3xl font-extrabold leading-[1.05] text-foreground sm:text-4xl">
                     {shot.title}
                   </h3>
-                  <p className="mt-4 text-lg leading-8 text-muted">
+                  <p className="mt-5 text-lg leading-8 text-muted">
                     {shot.description}
                   </p>
                 </div>

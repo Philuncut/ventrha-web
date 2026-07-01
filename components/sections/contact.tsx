@@ -39,17 +39,15 @@ export function Contact() {
   }
 
   return (
-    <section id="kontakt" className="py-20 sm:py-28">
+    <section id="kontakt" className="py-28 sm:py-40">
       <Container>
-        <div className="grid gap-12 rounded-3xl border border-border bg-surface p-8 sm:p-12 lg:grid-cols-2 lg:gap-16">
+        <div className="ring-gradient grid gap-12 rounded-3xl border border-border bg-surface p-8 sm:p-12 lg:grid-cols-2 lg:gap-16">
           <div>
-            <span className="text-xs font-medium uppercase tracking-wider text-accent">
-              Kontakt
-            </span>
-            <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            <span className="eyebrow text-accent">Kontakt</span>
+            <h2 className="font-display mt-5 text-balance text-4xl font-extrabold leading-[1.02] text-foreground sm:text-5xl">
               Interesse an VENTRHA?
             </h2>
-            <p className="mt-4 text-pretty text-lg leading-8 text-muted">
+            <p className="mt-6 text-pretty text-lg leading-8 text-muted">
               VENTRHA wird gerade als eigenständiges Produkt aufgebaut. Melde
               dich unverbindlich – wir zeigen dir, wie VENTRHA deinen Versand
               automatisiert.
