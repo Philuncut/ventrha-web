@@ -1,26 +1,85 @@
 @import "tailwindcss";
 
+/*
+  VENTRHA – Design-Tokens
+  Dark-first, abgeleitet aus der echten App-Oberfläche und dem monochromen Logo:
+  near-black Hintergrund, weiße Typografie, dezente Graustufen für Flächen/Rahmen.
+  Einziger Akzent ist das Blau, das in der App für internationale Sendungen /
+  Zollware verwendet wird – die einzige Farbe der Marke.
+*/
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Basis (dunkel) */
+  --background: #0a0a0b;
+  --foreground: #fafafa;
+
+  /* Flächen, Rahmen, sekundärer Text */
+  --surface: #111113;
+  --surface-2: #18181b;
+  --border: #232327;
+  --border-strong: #2f2f35;
+  --muted: #a1a1aa;
+  --muted-2: #71717a;
+
+  /* Heller Kontrastbereich (z. B. invertierte CTA-Flächen) */
+  --paper: #fafafa;
+  --on-paper: #0a0a0b;
+
+  /* Akzent – Blau aus der App (internationale Sendungen / Zoll) */
+  --accent: #3b82f6;
+  --accent-strong: #2563eb;
+  --accent-soft: #1d2740;
+  --on-accent: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+
+  --color-paper: var(--paper);
+  --color-on-paper: var(--on-paper);
+
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Verhindert, dass Ankerziele hinter dem Sticky-Header verschwinden */
+  scroll-padding-top: 5rem;
+  color-scheme: dark;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/*
+  Wortmarke im Stil des Logos: fette, kursive Versalien mit enger Laufweite.
+*/
+.wordmark {
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
 }
