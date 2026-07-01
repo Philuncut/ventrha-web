@@ -18,30 +18,51 @@ import {
  * prefers-reduced-motion stoppt die Drehung (statische Ansicht).
  */
 
-// VENTRHA-Hub (Wien) + Zielstädte.
-const HUB: [number, number] = [16.37, 48.21];
+// Knotenpunkte weltweit (Index 0 = VENTRHA-Hub Wien).
 const CITIES: [number, number][] = [
+  [16.37, 48.21], // Wien (Hub)
   [-0.13, 51.51], // London
   [-74.0, 40.71], // New York
   [55.27, 25.2], // Dubai
   [3.39, 6.52], // Lagos
   [28.98, 41.01], // Istanbul
   [103.8, 1.35], // Singapur
+  [139.69, 35.68], // Tokio
+  [-46.63, -23.55], // São Paulo
+  [-118.24, 34.05], // Los Angeles
+  [28.04, -26.2], // Johannesburg
+  [72.87, 19.07], // Mumbai
+  [31.24, 30.04], // Kairo
+  [151.21, -33.87], // Sydney
+  [121.47, 31.23], // Shanghai
+];
+
+// Verbindungen (Index-Paare): viele vom Hub, dazu ein paar Stadt-zu-Stadt.
+const PAIRS: [number, number][] = [
+  [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8],
+  [0, 9], [0, 10], [0, 11], [0, 12], [0, 13],
+  [1, 2], [3, 11], [6, 7], [6, 13], [2, 9], [5, 12], [7, 14],
 ];
 
 // Großkreis-Routen (dicht abgetastet) einmalig vorberechnen.
-const ROUTES = CITIES.map((target) => ({
-  target,
-  line: {
-    type: "LineString" as const,
-    coordinates: Array.from({ length: 48 }, (_, i) =>
-      geoInterpolate(HUB, target)(i / 47),
-    ),
-  },
-}));
+const ROUTES = PAIRS.map(([ai, bi]) => {
+  const a = CITIES[ai];
+  const b = CITIES[bi];
+  const interp = geoInterpolate(a, b);
+  return {
+    a,
+    b,
+    line: {
+      type: "LineString" as const,
+      coordinates: Array.from({ length: 40 }, (_, i) => interp(i / 39)),
+    },
+  };
+});
 
 const graticule = geoGraticule().step([20, 20])();
 const HALF_PI = Math.PI / 2;
+const RUST = "hsla(20, 92%, 56%, 1)";
+const LILA = "hsla(278, 85%, 67%, 1)";
 
 export function Globe({ className = "" }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -137,26 +158,36 @@ export function Globe({ className = "" }: { className?: string }) {
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      // Routen + wandernder Lichtimpuls
+      // Routen + wandernder Lichtimpuls (ab und zu in Rost / Lila)
       for (let i = 0; i < ROUTES.length; i++) {
         const r = ROUTES[i];
-        if (geoDistance(r.target, center) >= HALF_PI - 0.03) continue;
+        const da = geoDistance(r.a, center);
+        const db = geoDistance(r.b, center);
+        if (Math.min(da, db) >= HALF_PI + 0.45) continue; // ganz auf der Rückseite
+
         ctx.setLineDash([]);
         ctx.beginPath();
         pathGen(r.line);
-        ctx.strokeStyle = line(0.4);
-        ctx.lineWidth = 0.9;
+        ctx.strokeStyle = line(0.26);
+        ctx.lineWidth = 0.7;
         ctx.stroke();
 
+        // Farbe des Impulses: meist Blau/Cyan, gelegentlich Rost, dann Lila.
+        const cyc = (t / 1000 + i * 2.3) % 20;
+        const col = cyc < 2.4 ? RUST : cyc >= 10 && cyc < 12.4 ? LILA : lineBright(1);
+
         const period = 2600;
-        const off = (((t + i * 480) % period) / period) * 420;
+        const off = (((t + i * 430) % period) / period) * 420;
         ctx.beginPath();
         pathGen(r.line);
         ctx.setLineDash([7, 420]);
         ctx.lineDashOffset = -off;
-        ctx.strokeStyle = lineBright(1);
+        ctx.strokeStyle = col;
         ctx.lineWidth = 2;
+        ctx.shadowColor = col;
+        ctx.shadowBlur = 6;
         ctx.stroke();
+        ctx.shadowBlur = 0;
       }
       ctx.setLineDash([]);
 
@@ -176,9 +207,8 @@ export function Globe({ className = "" }: { className?: string }) {
         ctx.fillStyle = lineBright(1);
         ctx.fill();
       };
-      for (let i = 0; i < ROUTES.length; i++)
-        node(ROUTES[i].target, size * 0.006, i * 460);
-      node(HUB, size * 0.009, 0);
+      for (let i = 0; i < CITIES.length; i++)
+        node(CITIES[i], size * (i === 0 ? 0.009 : 0.005), i * 300);
     }
 
     function frame(now: number) {
