@@ -49,7 +49,7 @@ export function DataOrbit() {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div
                   aria-hidden
-                  className="absolute h-[58%] w-[58%] rounded-full bg-background/45 blur-2xl"
+                  className="absolute h-[50%] w-[50%] rounded-full bg-background/45 blur-2xl"
                 />
                 <Image
                   src="/icon-marketing-dark.png"
@@ -57,7 +57,7 @@ export function DataOrbit() {
                   width={720}
                   height={720}
                   priority
-                  className="relative w-[82%] drop-shadow-[0_0_30px_rgba(10,10,11,0.6)]"
+                  className="relative w-[70%] drop-shadow-[0_0_30px_rgba(10,10,11,0.6)]"
                 />
               </div>
             </div>
