@@ -3,49 +3,6 @@ import { Container } from "@/components/container";
 import { Reveal } from "@/components/reveal";
 import { Globe } from "@/components/globe";
 
-type OrbitItem = {
-  label: string;
-  angle: number; // Startwinkel in Grad
-};
-
-type Ring = {
-  radius: number; // % der Bühnenbreite (Desktop)
-  radiusSm: number; // % der Bühnenbreite (Mobile)
-  duration: number; // Sekunden pro Umlauf
-  reverse?: boolean; // Umlaufrichtung
-  items: OrbitItem[];
-};
-
-// Carrier & Shop-Systeme, die auf einem Ring um die Erde kreisen.
-const rings: Ring[] = [
-  {
-    radius: 44,
-    radiusSm: 37,
-    duration: 64,
-    items: [
-      { label: "DHL", angle: 0 },
-      { label: "UPS", angle: 51 },
-      { label: "Shopify", angle: 103 },
-      { label: "Wix", angle: 154 },
-      { label: "WooCommerce", angle: 206 },
-      { label: "FedEx", angle: 257 },
-      { label: "GLS", angle: 309 },
-    ],
-  },
-];
-
-function Chip({ item, glowDelay }: { item: OrbitItem; glowDelay: number }) {
-  return (
-    <div
-      className="chip-glow flex items-center gap-1.5 whitespace-nowrap rounded-full border border-border-strong bg-surface/90 px-3 py-1.5 text-[11px] font-semibold text-foreground backdrop-blur sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
-      style={{ animationDelay: `${glowDelay}s` }}
-    >
-      <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-      {item.label}
-    </div>
-  );
-}
-
 export function DataOrbit() {
   return (
     <section className="relative overflow-hidden border-b border-border py-24 sm:py-32">
@@ -88,71 +45,22 @@ export function DataOrbit() {
                 }}
               />
               <Globe className="relative h-full w-full" />
+              {/* Logo fast über den ganzen Erdball */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div
                   aria-hidden
-                  className="absolute h-[36%] w-[36%] rounded-full bg-background/55 blur-lg"
+                  className="absolute h-[58%] w-[58%] rounded-full bg-background/45 blur-2xl"
                 />
                 <Image
                   src="/icon-marketing-dark.png"
                   alt="VENTRHA"
-                  width={420}
-                  height={420}
+                  width={720}
+                  height={720}
                   priority
-                  className="relative w-[40%]"
+                  className="relative w-[82%] drop-shadow-[0_0_30px_rgba(10,10,11,0.6)]"
                 />
               </div>
             </div>
-
-            {/* Rotierende Marken-Chips – über dem Kugelrand */}
-            {rings.map((ring, ri) => (
-              <div
-                key={ri}
-                className="orbit-ring"
-                style={
-                  {
-                    "--orbit-dur": `${ring.duration}s`,
-                    "--orbit-dir": ring.reverse ? "reverse" : "normal",
-                    "--orbit-dir-rev": ring.reverse ? "normal" : "reverse",
-                  } as React.CSSProperties
-                }
-              >
-                {ring.items.map((item, idx) => (
-                  <div
-                    key={item.label}
-                    className="orbit-arm"
-                    style={
-                      {
-                        "--orbit-r": `${ring.radius}%`,
-                        "--orbit-r-sm": `${ring.radiusSm}%`,
-                        transform: `rotate(${item.angle}deg)`,
-                      } as React.CSSProperties
-                    }
-                  >
-                    <div className="orbit-chip-pos">
-                      <div
-                        className="orbit-upright"
-                        style={
-                          {
-                            "--orbit-dur": `${ring.duration}s`,
-                            "--orbit-dir-rev": ring.reverse
-                              ? "normal"
-                              : "reverse",
-                          } as React.CSSProperties
-                        }
-                      >
-                        <div style={{ transform: `rotate(${-item.angle}deg)` }}>
-                          <Chip
-                            item={item}
-                            glowDelay={-(idx * 9) / ring.items.length}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
           </div>
         </Reveal>
       </Container>
