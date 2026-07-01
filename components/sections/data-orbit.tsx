@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Container } from "@/components/container";
 import { Reveal } from "@/components/reveal";
+import { Globe } from "@/components/globe";
 
 type OrbitItem = {
   label: string;
@@ -18,7 +19,7 @@ type Ring = {
 // Carrier & Shop-Systeme, die um VENTRHA kreisen.
 const rings: Ring[] = [
   {
-    radius: 38,
+    radius: 40,
     duration: 48,
     items: [
       { label: "DHL", angle: 0, accent: true },
@@ -28,7 +29,7 @@ const rings: Ring[] = [
     ],
   },
   {
-    radius: 24,
+    radius: 28,
     duration: 34,
     reverse: true,
     items: [
@@ -143,28 +144,31 @@ export function DataOrbit() {
               </div>
             ))}
 
-            {/* Zentrum: Logo mit Schriftzug + pulsierender Glow */}
-            <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+            {/* Zentrum: halbtransparente Weltkugel mit Logo davor */}
+            <div className="absolute left-1/2 top-1/2 flex aspect-square w-[44%] -translate-x-1/2 -translate-y-1/2 items-center justify-center">
               <div
                 aria-hidden
-                className="orbit-core-glow absolute h-56 w-56 rounded-full sm:h-64 sm:w-64"
+                className="orbit-core-glow absolute inset-[-16%] rounded-full"
                 style={{
                   background: "var(--gradient-accent)",
-                  filter: "blur(48px)",
+                  filter: "blur(46px)",
                 }}
               />
-              <div
-                aria-hidden
-                className="absolute h-44 w-44 rounded-full bg-background/60 blur-xl sm:h-52 sm:w-52"
-              />
-              <Image
-                src="/icon-marketing-dark.png"
-                alt="VENTRHA"
-                width={240}
-                height={240}
-                priority
-                className="relative h-40 w-40 sm:h-52 sm:w-52"
-              />
+              <Globe className="relative h-full w-full" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div
+                  aria-hidden
+                  className="absolute h-[44%] w-[44%] rounded-full bg-background/55 blur-md"
+                />
+                <Image
+                  src="/icon-marketing-dark.png"
+                  alt="VENTRHA"
+                  width={200}
+                  height={200}
+                  priority
+                  className="relative w-[46%]"
+                />
+              </div>
             </div>
           </div>
         </Reveal>

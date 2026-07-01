@@ -172,16 +172,59 @@ body {
   will-change: transform;
 }
 
+/* Globe: Verbindungsbögen mit wanderndem Lichtimpuls. */
+@keyframes globe-dash {
+  to {
+    stroke-dashoffset: -120;
+  }
+}
+.globe-arc {
+  stroke-dasharray: 12 108;
+  animation: globe-dash 3s linear infinite;
+  will-change: stroke-dashoffset;
+}
+
+/* Globe: pulsierende Knotenpunkte (Ping-Ring). */
+@keyframes globe-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  70%,
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+.globe-ping {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: globe-ping 2.8s ease-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Globe: sehr langsame Eigendrehung des Gitternetzes (Leben). */
+@keyframes globe-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.globe-graticule {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: globe-spin 90s linear infinite;
+}
+
 /* Langsam pulsierender Glow-Ring hinter dem Zentrum. */
 @keyframes orbit-pulse {
   0%,
   100% {
     transform: scale(1);
-    opacity: 0.55;
+    opacity: 0.22;
   }
   50% {
-    transform: scale(1.12);
-    opacity: 0.85;
+    transform: scale(1.1);
+    opacity: 0.4;
   }
 }
 .orbit-core-glow {
