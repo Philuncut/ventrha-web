@@ -10,7 +10,6 @@ import {
 } from "framer-motion";
 import { Container } from "@/components/container";
 import { ButtonLink } from "@/components/button";
-import { AppWindow } from "@/components/app-window";
 
 const worksWith = ["DHL", "GLS", "Post AT", "WooCommerce"];
 
@@ -26,7 +25,6 @@ export function Hero() {
     offset: ["start start", "end start"],
   });
   const glowY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 170]);
-  const shotY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -40]);
 
   // Gestaffelter Einstieg: Eyebrow -> Headline -> Text -> CTAs -> Vertrauensleiste.
   const container: Variants = {
@@ -142,26 +140,6 @@ export function Hero() {
                 <span key={name}>{name}</span>
               ))}
             </div>
-          </motion.div>
-        </motion.div>
-
-        <motion.div
-          className="mx-auto mt-20 max-w-5xl"
-          style={{ y: shotY, willChange: "transform" }}
-        >
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 44, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.85, ease: EASE, delay: reduce ? 0 : 0.75 }}
-          >
-            <AppWindow
-              src="/screen1.png"
-              alt="VENTRHA Dashboard mit offenen Bestellungen, Kundenstatus und internationalen Sendungen"
-              width={1503}
-              height={834}
-              title="VENTRHA – Dashboard"
-              priority
-            />
           </motion.div>
         </motion.div>
       </Container>
