@@ -210,6 +210,24 @@ body {
   will-change: transform, opacity;
 }
 
+/* Marken-Chips: alle gleich, glühen gestaffelt nacheinander kurz auf. */
+@keyframes chip-glow {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    border-color: var(--border-strong);
+  }
+  88% {
+    box-shadow: 0 0 22px -2px var(--accent);
+    border-color: var(--accent);
+  }
+}
+.chip-glow {
+  animation: chip-glow 9s ease-in-out infinite;
+  will-change: box-shadow;
+}
+
 /* Globe: sehr langsame Eigendrehung des Gitternetzes (Leben). */
 @keyframes globe-spin {
   to {

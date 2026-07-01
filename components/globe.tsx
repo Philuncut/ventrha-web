@@ -18,9 +18,6 @@ import {
  * prefers-reduced-motion stoppt die Drehung (statische Ansicht).
  */
 
-const ACCENT = "#3b82f6";
-const ACCENT2 = "#22d3ee";
-
 // VENTRHA-Hub (Wien) + Zielstädte.
 const HUB: [number, number] = [16.37, 48.21];
 const CITIES: [number, number][] = [
@@ -93,6 +90,11 @@ export function Globe({ className = "" }: { className?: string }) {
       projection.rotate([lambda, phi]);
       const center: [number, number] = [-lambda, -phi];
 
+      // Langsam wandernder Farbton für alle Linien (Blau -> Cyan -> Indigo).
+      const hue = 214 + Math.sin(t / 2200) * 36; // ~178..250
+      const line = (a: number) => `hsla(${hue}, 85%, 63%, ${a})`;
+      const lineBright = (a: number) => `hsla(${hue}, 95%, 72%, ${a})`;
+
       // Kugelkörper
       const g = ctx.createRadialGradient(
         size * 0.4,
@@ -102,8 +104,8 @@ export function Globe({ className = "" }: { className?: string }) {
         size / 2,
         R,
       );
-      g.addColorStop(0, "rgba(59,130,246,0.16)");
-      g.addColorStop(0.6, "rgba(59,130,246,0.03)");
+      g.addColorStop(0, `hsla(${hue}, 85%, 58%, 0.16)`);
+      g.addColorStop(0.6, `hsla(${hue}, 85%, 58%, 0.03)`);
       g.addColorStop(1, "rgba(0,0,0,0.5)");
       ctx.beginPath();
       ctx.arc(size / 2, size / 2, R, 0, 2 * Math.PI);
@@ -113,7 +115,7 @@ export function Globe({ className = "" }: { className?: string }) {
       // Gitternetz
       ctx.beginPath();
       pathGen(graticule as GeoPermissibleObjects);
-      ctx.strokeStyle = "rgba(59,130,246,0.13)";
+      ctx.strokeStyle = line(0.13);
       ctx.lineWidth = 0.5;
       ctx.stroke();
 
@@ -121,9 +123,9 @@ export function Globe({ className = "" }: { className?: string }) {
       if (land) {
         ctx.beginPath();
         for (const f of land.features) pathGen(f);
-        ctx.fillStyle = "rgba(59,130,246,0.11)";
+        ctx.fillStyle = line(0.1);
         ctx.fill();
-        ctx.strokeStyle = "rgba(59,130,246,0.4)";
+        ctx.strokeStyle = line(0.4);
         ctx.lineWidth = 0.4;
         ctx.stroke();
       }
@@ -131,7 +133,7 @@ export function Globe({ className = "" }: { className?: string }) {
       // Rand
       ctx.beginPath();
       ctx.arc(size / 2, size / 2, R, 0, 2 * Math.PI);
-      ctx.strokeStyle = "rgba(59,130,246,0.55)";
+      ctx.strokeStyle = line(0.55);
       ctx.lineWidth = 1;
       ctx.stroke();
 
@@ -142,7 +144,7 @@ export function Globe({ className = "" }: { className?: string }) {
         ctx.setLineDash([]);
         ctx.beginPath();
         pathGen(r.line);
-        ctx.strokeStyle = "rgba(59,130,246,0.4)";
+        ctx.strokeStyle = line(0.4);
         ctx.lineWidth = 0.9;
         ctx.stroke();
 
@@ -152,19 +154,14 @@ export function Globe({ className = "" }: { className?: string }) {
         pathGen(r.line);
         ctx.setLineDash([7, 420]);
         ctx.lineDashOffset = -off;
-        ctx.strokeStyle = ACCENT2;
+        ctx.strokeStyle = lineBright(1);
         ctx.lineWidth = 2;
         ctx.stroke();
       }
       ctx.setLineDash([]);
 
       // Knoten mit Ping
-      const node = (
-        coord: [number, number],
-        color: string,
-        base: number,
-        phase: number,
-      ) => {
+      const node = (coord: [number, number], base: number, phase: number) => {
         if (geoDistance(coord, center) >= HALF_PI - 0.02) return;
         const p = projection(coord);
         if (!p) return;
@@ -172,16 +169,16 @@ export function Globe({ className = "" }: { className?: string }) {
         const ph = (((t + phase) % period) / period) as number;
         ctx.beginPath();
         ctx.arc(p[0], p[1], base + ph * base * 2.3, 0, 2 * Math.PI);
-        ctx.fillStyle = `rgba(34,211,238,${0.5 * (1 - ph)})`;
+        ctx.fillStyle = lineBright(0.5 * (1 - ph));
         ctx.fill();
         ctx.beginPath();
         ctx.arc(p[0], p[1], base, 0, 2 * Math.PI);
-        ctx.fillStyle = color;
+        ctx.fillStyle = lineBright(1);
         ctx.fill();
       };
       for (let i = 0; i < ROUTES.length; i++)
-        node(ROUTES[i].target, ACCENT, size * 0.006, i * 460);
-      node(HUB, ACCENT2, size * 0.009, 0);
+        node(ROUTES[i].target, size * 0.006, i * 460);
+      node(HUB, size * 0.009, 0);
     }
 
     function frame(now: number) {

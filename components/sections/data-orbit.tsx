@@ -6,7 +6,6 @@ import { Globe } from "@/components/globe";
 type OrbitItem = {
   label: string;
   angle: number; // Startwinkel in Grad
-  accent?: boolean;
 };
 
 type Ring = {
@@ -24,31 +23,24 @@ const rings: Ring[] = [
     radiusSm: 37,
     duration: 64,
     items: [
-      { label: "DHL", angle: 0, accent: true },
+      { label: "DHL", angle: 0 },
       { label: "UPS", angle: 51 },
-      { label: "Shopify", angle: 103, accent: true },
+      { label: "Shopify", angle: 103 },
       { label: "Wix", angle: 154 },
-      { label: "WooCommerce", angle: 206, accent: true },
+      { label: "WooCommerce", angle: 206 },
       { label: "FedEx", angle: 257 },
       { label: "GLS", angle: 309 },
     ],
   },
 ];
 
-function Chip({ item }: { item: OrbitItem }) {
+function Chip({ item, glowDelay }: { item: OrbitItem; glowDelay: number }) {
   return (
     <div
-      className={`flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-[11px] font-semibold backdrop-blur sm:gap-2 sm:px-4 sm:py-2 sm:text-sm ${
-        item.accent
-          ? "border-accent/40 bg-accent-soft/90 text-foreground shadow-[0_0_22px_-4px_var(--accent)]"
-          : "border-border-strong bg-surface/90 text-muted"
-      }`}
+      className="chip-glow flex items-center gap-1.5 whitespace-nowrap rounded-full border border-border-strong bg-surface/90 px-3 py-1.5 text-[11px] font-semibold text-foreground backdrop-blur sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
+      style={{ animationDelay: `${glowDelay}s` }}
     >
-      <span
-        className={`h-1.5 w-1.5 rounded-full ${
-          item.accent ? "bg-accent" : "bg-muted-2"
-        }`}
-      />
+      <span className="h-1.5 w-1.5 rounded-full bg-accent" />
       {item.label}
     </div>
   );
@@ -125,7 +117,7 @@ export function DataOrbit() {
                   } as React.CSSProperties
                 }
               >
-                {ring.items.map((item) => (
+                {ring.items.map((item, idx) => (
                   <div
                     key={item.label}
                     className="orbit-arm"
@@ -150,7 +142,10 @@ export function DataOrbit() {
                         }
                       >
                         <div style={{ transform: `rotate(${-item.angle}deg)` }}>
-                          <Chip item={item} />
+                          <Chip
+                            item={item}
+                            glowDelay={-(idx * 9) / ring.items.length}
+                          />
                         </div>
                       </div>
                     </div>
