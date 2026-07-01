@@ -1,6 +1,13 @@
 "use client";
 
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { useRef } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  type Variants,
+} from "framer-motion";
 import { Container } from "@/components/container";
 import { ButtonLink } from "@/components/button";
 import { AppWindow } from "@/components/app-window";
@@ -11,80 +18,76 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function Hero() {
   const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Parallax: an den Hero-Fortschritt gekoppelt (0 = oben, 1 = herausgescrollt).
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const glowY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 170]);
+  const shotY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -40]);
 
   // Gestaffelter Einstieg: Eyebrow -> Headline -> Text -> CTAs -> Vertrauensleiste.
   const container: Variants = {
     hidden: {},
-    visible: {
-      transition: { staggerChildren: 0.1, delayChildren: 0.1 },
-    },
+    visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
   };
   const item: Variants = {
     hidden: { opacity: 0, y: reduce ? 0 : 26 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.65, ease: EASE },
-    },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: EASE } },
   };
 
   return (
-    <section className="relative overflow-hidden border-b border-border">
-      {/* Feines Raster im Hintergrund */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
-          maskImage:
-            "radial-gradient(ellipse 75% 55% at 50% 0%, #000 40%, transparent 82%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 75% 55% at 50% 0%, #000 40%, transparent 82%)",
-        }}
-      />
-      {/* Leuchtende, langsam atmende Blau→Cyan-Glows (nur wenn Motion erlaubt) */}
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden border-b border-border"
+    >
+      {/* Leuchtende Blau→Cyan-Glows – laggen beim Scrollen (Parallax) */}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-[-8%] -z-10 h-[620px] w-[1100px] -translate-x-1/2 rounded-full blur-[120px]"
-        style={{
-          background:
-            "radial-gradient(circle, var(--accent) 0%, transparent 62%)",
-          willChange: "transform, opacity",
-        }}
-        initial={{ opacity: reduce ? 0.28 : 0 }}
-        animate={
-          reduce
-            ? { opacity: 0.28 }
-            : { opacity: [0.22, 0.34, 0.22], scale: [1, 1.08, 1] }
-        }
-        transition={
-          reduce
-            ? { duration: 1 }
-            : { duration: 11, repeat: Infinity, ease: "easeInOut" }
-        }
-      />
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute right-[6%] top-[26%] -z-10 h-[400px] w-[400px] rounded-full blur-[110px]"
-        style={{
-          background:
-            "radial-gradient(circle, var(--accent-2) 0%, transparent 60%)",
-          willChange: "transform, opacity",
-        }}
-        initial={{ opacity: reduce ? 0.18 : 0 }}
-        animate={
-          reduce
-            ? { opacity: 0.18 }
-            : { opacity: [0.12, 0.24, 0.12], x: [0, 26, 0], y: [0, -18, 0] }
-        }
-        transition={
-          reduce
-            ? { duration: 1 }
-            : { duration: 14, repeat: Infinity, ease: "easeInOut" }
-        }
-      />
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{ y: glowY, willChange: "transform" }}
+      >
+        <motion.div
+          className="absolute left-1/2 top-[-8%] h-[620px] w-[1100px] -translate-x-1/2 rounded-full blur-[120px]"
+          style={{
+            background:
+              "radial-gradient(circle, var(--accent) 0%, transparent 62%)",
+            willChange: "transform, opacity",
+          }}
+          initial={{ opacity: reduce ? 0.28 : 0 }}
+          animate={
+            reduce
+              ? { opacity: 0.28 }
+              : { opacity: [0.22, 0.34, 0.22], scale: [1, 1.08, 1] }
+          }
+          transition={
+            reduce
+              ? { duration: 1 }
+              : { duration: 11, repeat: Infinity, ease: "easeInOut" }
+          }
+        />
+        <motion.div
+          className="absolute right-[6%] top-[26%] h-[400px] w-[400px] rounded-full blur-[110px]"
+          style={{
+            background:
+              "radial-gradient(circle, var(--accent-2) 0%, transparent 60%)",
+            willChange: "transform, opacity",
+          }}
+          initial={{ opacity: reduce ? 0.18 : 0 }}
+          animate={
+            reduce
+              ? { opacity: 0.18 }
+              : { opacity: [0.12, 0.24, 0.12], x: [0, 26, 0], y: [0, -18, 0] }
+          }
+          transition={
+            reduce
+              ? { duration: 1 }
+              : { duration: 14, repeat: Infinity, ease: "easeInOut" }
+          }
+        />
+      </motion.div>
 
       <Container className="pt-24 pb-20 sm:pt-32 sm:pb-28 lg:pt-40">
         <motion.div
@@ -144,19 +147,22 @@ export function Hero() {
 
         <motion.div
           className="mx-auto mt-20 max-w-5xl"
-          initial={reduce ? false : { opacity: 0, y: 44, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.85, ease: EASE, delay: reduce ? 0 : 0.75 }}
-          style={{ willChange: "transform, opacity" }}
+          style={{ y: shotY, willChange: "transform" }}
         >
-          <AppWindow
-            src="/screen1.png"
-            alt="VENTRHA Dashboard mit offenen Bestellungen, Kundenstatus und internationalen Sendungen"
-            width={1503}
-            height={834}
-            title="VENTRHA – Dashboard"
-            priority
-          />
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 44, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.85, ease: EASE, delay: reduce ? 0 : 0.75 }}
+          >
+            <AppWindow
+              src="/screen1.png"
+              alt="VENTRHA Dashboard mit offenen Bestellungen, Kundenstatus und internationalen Sendungen"
+              width={1503}
+              height={834}
+              title="VENTRHA – Dashboard"
+              priority
+            />
+          </motion.div>
         </motion.div>
       </Container>
     </section>
