@@ -145,10 +145,10 @@ export function DataOrbit() {
             ))}
 
             {/* Zentrum: halbtransparente Weltkugel mit Logo davor */}
-            <div className="absolute left-1/2 top-1/2 flex aspect-square w-[44%] -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+            <div className="absolute left-1/2 top-1/2 flex aspect-square w-[48%] -translate-x-1/2 -translate-y-1/2 items-center justify-center">
               <div
                 aria-hidden
-                className="orbit-core-glow absolute inset-[-16%] rounded-full"
+                className="orbit-core-glow absolute inset-[-14%] rounded-full"
                 style={{
                   background: "var(--gradient-accent)",
                   filter: "blur(46px)",
@@ -158,7 +158,7 @@ export function DataOrbit() {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div
                   aria-hidden
-                  className="absolute h-[44%] w-[44%] rounded-full bg-background/55 blur-md"
+                  className="absolute h-[30%] w-[30%] rounded-full bg-background/70 blur-md"
                 />
                 <Image
                   src="/icon-marketing-dark.png"
@@ -166,7 +166,7 @@ export function DataOrbit() {
                   width={200}
                   height={200}
                   priority
-                  className="relative w-[46%]"
+                  className="relative w-[30%]"
                 />
               </div>
             </div>
