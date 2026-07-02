@@ -85,12 +85,12 @@ export function DataOrbit() {
   // angedockten Phase, unter der Kugel; bleibt lange lesbar, blendet erst ganz
   // am Ende aus.
   const OUT: [number, number] = [0.9, 0.99];
-  const eyO = useTransform(p, [0.38, 0.46, ...OUT], [0, 1, 1, 0]);
-  const eyY = useTransform(p, [0.38, 0.46], [22, 0]);
-  const hdO = useTransform(p, [0.45, 0.55, ...OUT], [0, 1, 1, 0]);
-  const hdY = useTransform(p, [0.45, 0.55], [26, 0]);
-  const paO = useTransform(p, [0.54, 0.64, ...OUT], [0, 1, 1, 0]);
-  const paY = useTransform(p, [0.54, 0.64], [24, 0]);
+  const eyO = useTransform(p, [0.22, 0.3, ...OUT], [0, 1, 1, 0]);
+  const eyY = useTransform(p, [0.22, 0.3], [22, 0]);
+  const hdO = useTransform(p, [0.28, 0.37, ...OUT], [0, 1, 1, 0]);
+  const hdY = useTransform(p, [0.28, 0.37], [26, 0]);
+  const paO = useTransform(p, [0.35, 0.45, ...OUT], [0, 1, 1, 0]);
+  const paY = useTransform(p, [0.35, 0.45], [24, 0]);
 
   // Statische Variante bei reduzierter Bewegung.
   if (reduce) {
