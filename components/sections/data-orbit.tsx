@@ -59,31 +59,35 @@ export function DataOrbit() {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
 
+  // Messung startet bereits beim Eintreten der Sektion ("start end"), nicht
+  // erst beim Andocken. So reagiert die Erde ab dem ersten sichtbaren Pixel.
+  // Bei h-[220vh] + sticky h-screen dockt die Sektion bei ~0.45 an (100/220).
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end end"],
+    offset: ["start end", "end end"],
   });
 
-  // Erde kommt klein rein, wächst zur vollen Größe und schrumpft am Ende weg.
+  // Erde wächst während sie hereinscrollt, steht bei ~0.45 (Andocken) voll da,
+  // hält, und schrumpft am Ende weg.
   const scale = useTransform(
     scrollYProgress,
-    [0, 0.55, 0.82, 1],
-    [0.4, 1, 1, 0.55],
+    [0, 0.42, 0.85, 1],
+    [0.35, 1, 1, 0.5],
   );
   const globeOpacity = useTransform(
     scrollYProgress,
-    [0, 0.05, 0.88, 1],
-    [0.35, 1, 1, 0],
+    [0, 0.12, 0.9, 1],
+    [0, 1, 1, 0],
   );
-  // Text wird nacheinander nachgeschoben (Eyebrow -> Headline -> Text),
-  // unter der Kugel, gut lesbar; am Ende zügiger Ausblend-Swap.
-  const OUT: [number, number] = [0.82, 0.94];
-  const eyO = useTransform(scrollYProgress, [0.06, 0.16, ...OUT], [0, 1, 1, 0]);
-  const eyY = useTransform(scrollYProgress, [0.06, 0.16], [22, 0]);
-  const hdO = useTransform(scrollYProgress, [0.14, 0.26, ...OUT], [0, 1, 1, 0]);
-  const hdY = useTransform(scrollYProgress, [0.14, 0.26], [26, 0]);
-  const paO = useTransform(scrollYProgress, [0.24, 0.38, ...OUT], [0, 1, 1, 0]);
-  const paY = useTransform(scrollYProgress, [0.24, 0.38], [24, 0]);
+  // Text wird nacheinander nachgeschoben (Eyebrow -> Headline -> Text) in der
+  // angedockten Phase, unter der Kugel; am Ende zügiger Ausblend-Swap.
+  const OUT: [number, number] = [0.86, 0.96];
+  const eyO = useTransform(scrollYProgress, [0.5, 0.58, ...OUT], [0, 1, 1, 0]);
+  const eyY = useTransform(scrollYProgress, [0.5, 0.58], [22, 0]);
+  const hdO = useTransform(scrollYProgress, [0.56, 0.64, ...OUT], [0, 1, 1, 0]);
+  const hdY = useTransform(scrollYProgress, [0.56, 0.64], [26, 0]);
+  const paO = useTransform(scrollYProgress, [0.62, 0.72, ...OUT], [0, 1, 1, 0]);
+  const paY = useTransform(scrollYProgress, [0.62, 0.72], [24, 0]);
 
   // Statische Variante bei reduzierter Bewegung.
   if (reduce) {
