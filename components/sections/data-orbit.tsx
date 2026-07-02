@@ -6,6 +6,7 @@ import {
   motion,
   useReducedMotion,
   useScroll,
+  useSpring,
   useTransform,
 } from "framer-motion";
 import { Container } from "@/components/container";
@@ -61,34 +62,35 @@ export function DataOrbit() {
 
   // Messung startet bereits beim Eintreten der Sektion ("start end"), nicht
   // erst beim Andocken. So reagiert die Erde ab dem ersten sichtbaren Pixel.
-  // Bei h-[300vh] + sticky h-screen dockt die Sektion bei ~0.33 an (100/300).
+  // Bei h-[360vh] + sticky h-screen dockt die Sektion bei ~0.28 an (100/360).
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end end"],
   });
 
+  // Scroll-Fortschritt über eine Spring glätten -> buttrige, leicht nachlaufende
+  // Bewegung statt harter 1:1-Kopplung an den Finger.
+  const p = useSpring(scrollYProgress, {
+    stiffness: 80,
+    damping: 26,
+    mass: 0.5,
+    restDelta: 0.0006,
+  });
+
   // Erde zieht sich lang auf (bis leicht nach dem Andocken), steht dann groß da
   // und schrumpft erst ganz am Ende weg.
-  const scale = useTransform(
-    scrollYProgress,
-    [0, 0.4, 0.9, 1],
-    [0.35, 1, 1, 0.5],
-  );
-  const globeOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.1, 0.92, 1],
-    [0, 1, 1, 0],
-  );
+  const scale = useTransform(p, [0, 0.32, 0.9, 1], [0.35, 1, 1, 0.5]);
+  const globeOpacity = useTransform(p, [0, 0.09, 0.92, 1], [0, 1, 1, 0]);
   // Text wird nacheinander nachgeschoben (Eyebrow -> Headline -> Text) in der
   // angedockten Phase, unter der Kugel; bleibt lange lesbar, blendet erst ganz
   // am Ende aus.
   const OUT: [number, number] = [0.9, 0.99];
-  const eyO = useTransform(scrollYProgress, [0.45, 0.53, ...OUT], [0, 1, 1, 0]);
-  const eyY = useTransform(scrollYProgress, [0.45, 0.53], [22, 0]);
-  const hdO = useTransform(scrollYProgress, [0.52, 0.62, ...OUT], [0, 1, 1, 0]);
-  const hdY = useTransform(scrollYProgress, [0.52, 0.62], [26, 0]);
-  const paO = useTransform(scrollYProgress, [0.6, 0.7, ...OUT], [0, 1, 1, 0]);
-  const paY = useTransform(scrollYProgress, [0.6, 0.7], [24, 0]);
+  const eyO = useTransform(p, [0.38, 0.46, ...OUT], [0, 1, 1, 0]);
+  const eyY = useTransform(p, [0.38, 0.46], [22, 0]);
+  const hdO = useTransform(p, [0.45, 0.55, ...OUT], [0, 1, 1, 0]);
+  const hdY = useTransform(p, [0.45, 0.55], [26, 0]);
+  const paO = useTransform(p, [0.54, 0.64, ...OUT], [0, 1, 1, 0]);
+  const paY = useTransform(p, [0.54, 0.64], [24, 0]);
 
   // Statische Variante bei reduzierter Bewegung.
   if (reduce) {
@@ -111,12 +113,12 @@ export function DataOrbit() {
   }
 
   return (
-    <section ref={ref} className="relative h-[300vh]">
-      <div className="sticky top-0 flex h-screen flex-col items-center justify-center gap-6 overflow-hidden border-y border-border px-6 sm:gap-8">
+    <section ref={ref} className="relative h-[360vh]">
+      <div className="sticky top-0 flex h-screen flex-col items-center justify-start gap-6 overflow-hidden border-y border-border px-6 pt-[12vh] sm:gap-8">
         {/* Erde – kommt klein rein und wächst mit dem Scroll */}
         <motion.div
           style={{ scale, opacity: globeOpacity, willChange: "transform" }}
-          className="relative aspect-square w-[min(48vh,84vw)] shrink-0"
+          className="relative aspect-square w-[min(54vh,88vw)] shrink-0"
         >
           <GlobeCore />
         </motion.div>
