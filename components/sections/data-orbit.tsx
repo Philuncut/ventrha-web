@@ -62,7 +62,9 @@ export function DataOrbit() {
 
   // Messung startet bereits beim Eintreten der Sektion ("start end"), nicht
   // erst beim Andocken. So reagiert die Erde ab dem ersten sichtbaren Pixel.
-  // Bei h-[360vh] + sticky h-screen dockt die Sektion bei ~0.28 an (100/360).
+  // Bei h-[260vh] + sticky h-screen dockt die Sektion bei ~0.38 an (100/260).
+  // Der Einflug (0..Andocken) ist immer 100vh lang -> Feeling bleibt gleich,
+  // egal wie hoch die Sektion ist; die Höhe steuert nur die gepinnte Dauer.
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end end"],
@@ -79,18 +81,17 @@ export function DataOrbit() {
 
   // Erde zieht sich lang auf (bis leicht nach dem Andocken), steht dann groß da
   // und schrumpft erst ganz am Ende weg.
-  const scale = useTransform(p, [0, 0.32, 0.9, 1], [0.35, 1, 1, 0.5]);
-  const globeOpacity = useTransform(p, [0, 0.09, 0.92, 1], [0, 1, 1, 0]);
+  const scale = useTransform(p, [0, 0.43, 0.7, 0.96], [0.35, 1, 1, 0.5]);
+  const globeOpacity = useTransform(p, [0, 0.1, 0.82, 0.96], [0, 1, 1, 0]);
   // Text wird nacheinander nachgeschoben (Eyebrow -> Headline -> Text) in der
-  // angedockten Phase, unter der Kugel; bleibt lange lesbar, blendet erst ganz
-  // am Ende aus.
-  const OUT: [number, number] = [0.9, 0.99];
-  const eyO = useTransform(p, [0.22, 0.3, ...OUT], [0, 1, 1, 0]);
-  const eyY = useTransform(p, [0.22, 0.3], [22, 0]);
-  const hdO = useTransform(p, [0.28, 0.37, ...OUT], [0, 1, 1, 0]);
-  const hdY = useTransform(p, [0.28, 0.37], [26, 0]);
-  const paO = useTransform(p, [0.35, 0.45, ...OUT], [0, 1, 1, 0]);
-  const paY = useTransform(p, [0.35, 0.45], [24, 0]);
+  // angedockten Phase, unter der Kugel; kurze Lesepause, dann Ausblend-Swap.
+  const OUT: [number, number] = [0.78, 0.94];
+  const eyO = useTransform(p, [0.33, 0.42, ...OUT], [0, 1, 1, 0]);
+  const eyY = useTransform(p, [0.33, 0.42], [22, 0]);
+  const hdO = useTransform(p, [0.4, 0.5, ...OUT], [0, 1, 1, 0]);
+  const hdY = useTransform(p, [0.4, 0.5], [26, 0]);
+  const paO = useTransform(p, [0.47, 0.57, ...OUT], [0, 1, 1, 0]);
+  const paY = useTransform(p, [0.47, 0.57], [24, 0]);
 
   // Statische Variante bei reduzierter Bewegung.
   if (reduce) {
@@ -113,7 +114,7 @@ export function DataOrbit() {
   }
 
   return (
-    <section ref={ref} className="relative h-[360vh]">
+    <section ref={ref} className="relative h-[260vh]">
       <div className="sticky top-0 flex h-screen flex-col items-center justify-start gap-6 overflow-hidden border-y border-border px-6 pt-[12vh] sm:gap-8">
         {/* Erde – kommt klein rein und wächst mit dem Scroll */}
         <motion.div
