@@ -79,23 +79,23 @@ export function DataOrbit() {
     restDelta: 0.0006,
   });
 
-  // Erde legt am Anfang schnell zu (front-loaded: bei ~0.3 schon fast voll),
-  // settelt sanft, steht groß da und schrumpft erst ganz am Ende weg.
+  // Erde startet klein und wird beim Scrollen gleichmäßig aufgezogen: voll erst
+  // beim Andocken (~0.57). Danach steht sie groß da und schrumpft am Ende weg.
   const scale = useTransform(
     p,
-    [0, 0.3, 0.5, 0.85, 0.98],
-    [0.42, 0.92, 1, 1, 0.5],
+    [0, 0.2, 0.55, 0.85, 0.98],
+    [0.28, 0.52, 1, 1, 0.5],
   );
-  const globeOpacity = useTransform(p, [0, 0.08, 0.86, 0.98], [0, 1, 1, 0]);
-  // Text wird nacheinander nachgeschoben (Eyebrow -> Headline -> Text) in der
-  // angedockten Phase, unter der Kugel; kurze Lesepause, dann zügiger Exit.
-  const OUT: [number, number] = [0.87, 0.98];
-  const eyO = useTransform(p, [0.49, 0.62, ...OUT], [0, 1, 1, 0]);
-  const eyY = useTransform(p, [0.49, 0.62], [22, 0]);
-  const hdO = useTransform(p, [0.59, 0.73, ...OUT], [0, 1, 1, 0]);
-  const hdY = useTransform(p, [0.59, 0.73], [26, 0]);
-  const paO = useTransform(p, [0.69, 0.82, ...OUT], [0, 1, 1, 0]);
-  const paY = useTransform(p, [0.69, 0.82], [24, 0]);
+  const globeOpacity = useTransform(p, [0, 0.1, 0.86, 0.98], [0, 1, 1, 0]);
+  // Text erst, wenn die Erde voll ist: erst Eyebrow+Headline, dann der Absatz;
+  // kurze Lesepause, dann zügiger Exit.
+  const OUT: [number, number] = [0.88, 0.98];
+  const eyO = useTransform(p, [0.56, 0.65, ...OUT], [0, 1, 1, 0]);
+  const eyY = useTransform(p, [0.56, 0.65], [22, 0]);
+  const hdO = useTransform(p, [0.62, 0.72, ...OUT], [0, 1, 1, 0]);
+  const hdY = useTransform(p, [0.62, 0.72], [26, 0]);
+  const paO = useTransform(p, [0.7, 0.8, ...OUT], [0, 1, 1, 0]);
+  const paY = useTransform(p, [0.7, 0.8], [24, 0]);
 
   // Statische Variante bei reduzierter Bewegung.
   if (reduce) {
