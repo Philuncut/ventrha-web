@@ -79,10 +79,14 @@ export function DataOrbit() {
     restDelta: 0.0006,
   });
 
-  // Erde zieht sich lang auf (bis leicht nach dem Andocken), steht dann groß da
-  // und schrumpft erst ganz am Ende weg.
-  const scale = useTransform(p, [0, 0.64, 0.85, 0.98], [0.35, 1, 1, 0.5]);
-  const globeOpacity = useTransform(p, [0, 0.14, 0.86, 0.98], [0, 1, 1, 0]);
+  // Erde legt am Anfang schnell zu (front-loaded: bei ~0.3 schon fast voll),
+  // settelt sanft, steht groß da und schrumpft erst ganz am Ende weg.
+  const scale = useTransform(
+    p,
+    [0, 0.3, 0.5, 0.85, 0.98],
+    [0.42, 0.92, 1, 1, 0.5],
+  );
+  const globeOpacity = useTransform(p, [0, 0.08, 0.86, 0.98], [0, 1, 1, 0]);
   // Text wird nacheinander nachgeschoben (Eyebrow -> Headline -> Text) in der
   // angedockten Phase, unter der Kugel; kurze Lesepause, dann zügiger Exit.
   const OUT: [number, number] = [0.87, 0.98];
