@@ -1,10 +1,14 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
-
-const EASE = [0.16, 1, 0.3, 1] as const;
-const VIEWPORT = { once: true, margin: "0px 0px -20% 0px" } as const;
+import { useRef, type ReactNode } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
 
 const COLS = 4;
 const ROWS = 4;
@@ -27,10 +31,73 @@ const TILES = Array.from({ length: COLS * ROWS }, (_, i) => {
   };
 });
 
+type Tile = (typeof TILES)[number];
+
+/** Einzelnes Logo-Bruchstück – scroll-gescrubbt: baut sich auf, fliegt weg. */
+function Shard({
+  p,
+  tile,
+  logo,
+}: {
+  p: MotionValue<number>;
+  tile: Tile;
+  logo: string;
+}) {
+  const opacity = useTransform(p, [0, 0.12, 0.38, 0.55], [0, 1, 1, 0]);
+  const scale = useTransform(p, [0, 0.18, 0.38, 0.55], [0.6, 1, 1, 0.5]);
+  const x = useTransform(p, [0.3, 0.55], [0, tile.dx]);
+  const y = useTransform(p, [0.3, 0.55], [0, tile.dy]);
+  const rotate = useTransform(p, [0.3, 0.55], [0, tile.rot]);
+
+  return (
+    <motion.span
+      aria-hidden
+      className="absolute block"
+      style={{
+        left: `${tile.c * (100 / COLS)}%`,
+        top: `${tile.r * (100 / ROWS)}%`,
+        width: `${100 / COLS}%`,
+        height: `${100 / ROWS}%`,
+        backgroundImage: `url(${logo})`,
+        backgroundSize: `${COLS * 100}% ${ROWS * 100}%`,
+        backgroundPosition: `${tile.bgX}% ${tile.bgY}%`,
+        backgroundRepeat: "no-repeat",
+        x,
+        y,
+        rotate,
+        scale,
+        opacity,
+      }}
+    />
+  );
+}
+
+/** Headline-Zeile, die scroll-gescrubbt aus einer Maske hochfährt. */
+function Line({
+  p,
+  text,
+  index,
+}: {
+  p: MotionValue<number>;
+  text: string;
+  index: number;
+}) {
+  const start = 0.5 + index * 0.07;
+  const y = useTransform(p, [start, start + 0.16], ["115%", "0%"]);
+  return (
+    <span className="block overflow-hidden pb-[0.12em]">
+      <motion.span style={{ y }} className="block">
+        {text}
+      </motion.span>
+    </span>
+  );
+}
+
 /**
  * Spektakulärer Section-Auftakt: Das VENTRHA-Logo scrollt herein, zerbricht in
- * Segmente (jede Kachel fliegt nach außen und verblasst) und aus den Bruch-
- * stücken steigt der Text hervor. prefers-reduced-motion -> statisch.
+ * Segmente und aus den Bruchstücken steigt der Text hervor. Vollständig an den
+ * Scroll gekoppelt -> beim Hochscrollen setzt sich alles wieder zusammen.
+ * prefers-reduced-motion -> statisch.
  */
 export function LogoShatterHeading({
   eyebrow,
@@ -46,6 +113,27 @@ export function LogoShatterHeading({
   className?: string;
 }) {
   const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "center center"],
+  });
+  const p = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 28,
+    mass: 0.5,
+    restDelta: 0.0005,
+  });
+
+  const eyeO = useTransform(p, [0.46, 0.6], [0, 1]);
+  const eyeY = useTransform(p, [0.46, 0.6], [12, 0]);
+  const eyeLS = useTransform(p, [0.46, 0.6], ["0.5em", "0.2em"]);
+  const paraStart = 0.6 + lines.length * 0.07;
+  const paraO = useTransform(p, [paraStart, paraStart + 0.16], [0, 1]);
+  const paraY = useTransform(p, [paraStart, paraStart + 0.16], [20, 0]);
+  const glowO = useTransform(p, [0.2, 0.42, 0.58], [0, 0.35, 0]);
+  const glowS = useTransform(p, [0.2, 0.58], [0.6, 1.7]);
 
   if (reduce) {
     return (
@@ -59,105 +147,44 @@ export function LogoShatterHeading({
     );
   }
 
-  const tileV: Variants = {
-    hidden: { opacity: 0, scale: 0.6, x: 0, y: 0, rotate: 0 },
-    visible: (t: (typeof TILES)[number]) => ({
-      opacity: [0, 1, 1, 0],
-      scale: [0.6, 1, 1, 0.5],
-      x: [0, 0, 0, t.dx],
-      y: [0, 0, 0, t.dy],
-      rotate: [0, 0, 0, t.rot],
-      transition: { duration: 1.8, times: [0, 0.22, 0.46, 1], ease: "easeInOut" },
-    }),
-  };
-
-  const eyebrowV: Variants = {
-    hidden: { opacity: 0, y: 12, letterSpacing: "0.5em" },
-    visible: {
-      opacity: 1,
-      y: 0,
-      letterSpacing: "0.2em",
-      transition: { duration: 0.7, ease: EASE, delay: 0.95 },
-    },
-  };
-  const lineV: Variants = {
-    hidden: { y: "115%" },
-    visible: (i: number) => ({
-      y: 0,
-      transition: { duration: 0.85, ease: EASE, delay: 1.05 + i * 0.13 },
-    }),
-  };
-  const paraV: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.7, ease: EASE, delay: 1.15 + lines.length * 0.13 },
-    },
-  };
-  const glowV: Variants = {
-    hidden: { opacity: 0, scale: 0.5 },
-    visible: {
-      opacity: [0, 0.35, 0],
-      scale: [0.5, 1.4, 1.7],
-      transition: { duration: 1.7, times: [0, 0.5, 1], ease: "easeOut" },
-    },
-  };
-
   return (
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={VIEWPORT}
+    <div
+      ref={ref}
       className={`relative mx-auto max-w-3xl text-center ${className}`}
     >
       {/* Logo-Splitter-Bühne */}
       <div className="relative mx-auto mb-8 h-28 w-28 sm:h-36 sm:w-36">
         <motion.span
           aria-hidden
-          variants={glowV}
           className="pointer-events-none absolute inset-0 rounded-full"
           style={{
             background:
               "radial-gradient(closest-side, var(--accent) 0%, transparent 70%)",
             filter: "blur(24px)",
+            opacity: glowO,
+            scale: glowS,
           }}
         />
         {TILES.map((t, i) => (
-          <motion.span
-            key={i}
-            custom={t}
-            variants={tileV}
-            aria-hidden
-            className="absolute block"
-            style={{
-              left: `${t.c * (100 / COLS)}%`,
-              top: `${t.r * (100 / ROWS)}%`,
-              width: `${100 / COLS}%`,
-              height: `${100 / ROWS}%`,
-              backgroundImage: `url(${logo})`,
-              backgroundSize: `${COLS * 100}% ${ROWS * 100}%`,
-              backgroundPosition: `${t.bgX}% ${t.bgY}%`,
-              backgroundRepeat: "no-repeat",
-            }}
-          />
+          <Shard key={i} p={p} tile={t} logo={logo} />
         ))}
       </div>
 
       {/* Text steigt aus den Bruchstücken */}
-      <motion.span variants={eyebrowV} className="eyebrow block text-accent">
+      <motion.span
+        style={{ opacity: eyeO, y: eyeY, letterSpacing: eyeLS }}
+        className="eyebrow block text-accent"
+      >
         {eyebrow}
       </motion.span>
       <h2 className="font-display mt-5 text-balance text-4xl font-extrabold leading-[1.02] text-foreground sm:text-5xl lg:text-6xl">
         {lines.map((line, i) => (
-          <span key={i} className="block overflow-hidden pb-[0.12em]">
-            <motion.span custom={i} variants={lineV} className="block">
-              {line}
-            </motion.span>
-          </span>
+          <Line key={i} p={p} text={line} index={i} />
         ))}
       </h2>
-      {children != null && <motion.div variants={paraV}>{children}</motion.div>}
-    </motion.div>
+      {children != null && (
+        <motion.div style={{ opacity: paraO, y: paraY }}>{children}</motion.div>
+      )}
+    </div>
   );
 }
