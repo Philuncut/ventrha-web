@@ -32,24 +32,24 @@ export function WorldSplit() {
     restDelta: 0.0006,
   });
 
-  // Erde: schnell von klein auf groß (voll bei ~0.45), dazu leichtes Slide von
-  // links.
-  const gScale = useTransform(p, [0, 0.45], [0.62, 1]);
-  const gX = useTransform(p, [0, 0.45], [-44, 0]);
-  const gOpacity = useTransform(p, [0, 0.16], [0, 1]);
+  // Erde: schnell von klein auf groß (voll bei ~0.35), dazu leichtes Slide von
+  // links. Kommt früh, damit der Übergang von oben nicht leer wirkt.
+  const gScale = useTransform(p, [0, 0.35], [0.66, 1]);
+  const gX = useTransform(p, [0, 0.35], [-44, 0]);
+  const gOpacity = useTransform(p, [0, 0.12], [0, 1]);
 
-  // Text nach und nach: Eyebrow -> Headline -> Absatz.
-  const eyO = useTransform(p, [0.2, 0.35], [0, 1]);
-  const eyY = useTransform(p, [0.2, 0.35], [20, 0]);
-  const hdO = useTransform(p, [0.34, 0.52], [0, 1]);
-  const hdY = useTransform(p, [0.34, 0.52], [24, 0]);
-  const paO = useTransform(p, [0.5, 0.72], [0, 1]);
-  const paY = useTransform(p, [0.5, 0.72], [22, 0]);
+  // Text nach und nach: Eyebrow -> Headline -> Absatz – früh startend.
+  const eyO = useTransform(p, [0.1, 0.24], [0, 1]);
+  const eyY = useTransform(p, [0.1, 0.24], [20, 0]);
+  const hdO = useTransform(p, [0.2, 0.38], [0, 1]);
+  const hdY = useTransform(p, [0.2, 0.38], [24, 0]);
+  const paO = useTransform(p, [0.32, 0.54], [0, 1]);
+  const paY = useTransform(p, [0.32, 0.54], [22, 0]);
 
   return (
     <section
       ref={ref}
-      className="relative min-h-[82vw] overflow-x-clip py-16 sm:min-h-[60vh] sm:py-24"
+      className="relative min-h-[66vw] overflow-x-clip py-10 sm:min-h-[52vh] sm:py-16"
     >
       {/* Halbe Weltkugel – ragt links aus dem Bild, wächst mit dem Scroll */}
       <div
