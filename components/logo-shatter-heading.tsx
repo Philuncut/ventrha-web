@@ -48,6 +48,16 @@ function Shard({
   const x = useTransform(p, [0.3, 0.55], [0, tile.dx]);
   const y = useTransform(p, [0.3, 0.55], [0, tile.dy]);
   const rotate = useTransform(p, [0.3, 0.55], [0, tile.rot]);
+  // Beim Wegfliegen aufleuchten und nachglühen (Accent-Glow).
+  const filter = useTransform(
+    p,
+    [0.28, 0.42, 0.55],
+    [
+      "drop-shadow(0 0 0px rgba(59,130,246,0))",
+      "drop-shadow(0 0 18px rgba(59,130,246,0.9))",
+      "drop-shadow(0 0 30px rgba(59,130,246,0.55))",
+    ],
+  );
 
   return (
     <motion.span
@@ -67,6 +77,7 @@ function Shard({
         rotate,
         scale,
         opacity,
+        filter,
       }}
     />
   );
@@ -139,7 +150,10 @@ export function LogoShatterHeading({
   }
 
   return (
-    <section ref={ref} className={`relative h-[140vh] ${className}`}>
+    <section
+      ref={ref}
+      className={`relative -mt-[40vh] h-[140vh] sm:-mt-[26vh] ${className}`}
+    >
       <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden px-6">
         <div className="relative w-full max-w-3xl text-center">
           {/* Logo-Splitter-Bühne */}
