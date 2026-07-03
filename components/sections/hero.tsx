@@ -119,10 +119,10 @@ export function Hero() {
                 initial={{ x: "-130%" }}
                 animate={{ x: "130%" }}
                 transition={{
-                  duration: 2.6,
+                  duration: 2.3,
                   ease: "easeInOut",
                   repeat: Infinity,
-                  repeatDelay: 3,
+                  repeatDelay: 2.2,
                 }}
               />
             )}
