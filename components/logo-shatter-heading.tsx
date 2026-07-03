@@ -43,19 +43,20 @@ function Shard({
   tile: Tile;
   logo: string;
 }) {
-  const opacity = useTransform(p, [0, 0.12, 0.38, 0.55], [0, 1, 1, 0]);
-  const scale = useTransform(p, [0, 0.18, 0.38, 0.55], [0.6, 1, 1, 0.5]);
+  // Logo schon beim Reinscrollen sichtbar (Opacity 1), erst beim Zerbrechen weg.
+  const opacity = useTransform(p, [0, 0.38, 0.55], [1, 1, 0]);
+  const scale = useTransform(p, [0, 0.4, 0.55], [1, 1, 0.5]);
   const x = useTransform(p, [0.3, 0.55], [0, tile.dx]);
   const y = useTransform(p, [0.3, 0.55], [0, tile.dy]);
   const rotate = useTransform(p, [0.3, 0.55], [0, tile.rot]);
-  // Beim Wegfliegen aufleuchten und nachglühen (Accent-Glow).
+  // Beim Wegfliegen kräftig aufleuchten und nachglühen (Accent-Glow).
   const filter = useTransform(
     p,
-    [0.28, 0.42, 0.55],
+    [0.26, 0.4, 0.55],
     [
-      "drop-shadow(0 0 0px rgba(59,130,246,0))",
-      "drop-shadow(0 0 18px rgba(59,130,246,0.9))",
-      "drop-shadow(0 0 30px rgba(59,130,246,0.55))",
+      "drop-shadow(0 0 0px rgba(96,165,250,0))",
+      "drop-shadow(0 0 26px rgba(96,165,250,1))",
+      "drop-shadow(0 0 42px rgba(96,165,250,0.7))",
     ],
   );
 
@@ -150,10 +151,7 @@ export function LogoShatterHeading({
   }
 
   return (
-    <section
-      ref={ref}
-      className={`relative -mt-[40vh] h-[140vh] sm:-mt-[26vh] ${className}`}
-    >
+    <section ref={ref} className={`relative h-[140vh] ${className}`}>
       <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden px-6">
         <div className="relative w-full max-w-3xl text-center">
           {/* Logo-Splitter-Bühne */}
