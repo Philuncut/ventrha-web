@@ -49,7 +49,7 @@ export function WorldSplit() {
   return (
     <section
       ref={ref}
-      className="relative min-h-[82vw] overflow-hidden py-16 sm:min-h-[60vh] sm:py-24"
+      className="relative min-h-[82vw] overflow-x-clip py-16 sm:min-h-[60vh] sm:py-24"
     >
       {/* Halbe Weltkugel – ragt links aus dem Bild, wächst mit dem Scroll */}
       <div
@@ -63,11 +63,11 @@ export function WorldSplit() {
           className="relative h-full w-full"
         >
           <div
-            className="absolute inset-[-8%] rounded-full"
+            className="absolute inset-[-28%] rounded-full"
             style={{
               background: "var(--gradient-accent)",
-              filter: "blur(70px)",
-              opacity: 0.45,
+              filter: "blur(90px)",
+              opacity: 0.4,
             }}
           />
           <Globe className="relative h-full w-full" />
