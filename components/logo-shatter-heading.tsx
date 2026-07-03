@@ -72,31 +72,11 @@ function Shard({
   );
 }
 
-/** Headline-Zeile, die scroll-gescrubbt aus einer Maske hochfährt. */
-function Line({
-  p,
-  text,
-  index,
-}: {
-  p: MotionValue<number>;
-  text: string;
-  index: number;
-}) {
-  const start = 0.5 + index * 0.07;
-  const y = useTransform(p, [start, start + 0.16], ["115%", "0%"]);
-  return (
-    <span className="block overflow-hidden pb-[0.12em]">
-      <motion.span style={{ y }} className="block">
-        {text}
-      </motion.span>
-    </span>
-  );
-}
-
 /**
  * Spektakulärer Section-Auftakt: Das VENTRHA-Logo scrollt herein, zerbricht in
- * Segmente und aus den Bruchstücken steigt der Text hervor. Vollständig an den
- * Scroll gekoppelt -> beim Hochscrollen setzt sich alles wieder zusammen.
+ * Segmente – und während die Segmente wegfliegen, blastet der Text aus der
+ * Mitte heraus (übergroß + unscharf -> knackscharf). Vollständig an den Scroll
+ * gekoppelt, setzt sich beim Hochscrollen wieder zusammen.
  * prefers-reduced-motion -> statisch.
  */
 export function LogoShatterHeading({
@@ -126,14 +106,21 @@ export function LogoShatterHeading({
     restDelta: 0.0005,
   });
 
-  const eyeO = useTransform(p, [0.46, 0.6], [0, 1]);
-  const eyeY = useTransform(p, [0.46, 0.6], [12, 0]);
-  const eyeLS = useTransform(p, [0.46, 0.6], ["0.5em", "0.2em"]);
-  const paraStart = 0.6 + lines.length * 0.07;
-  const paraO = useTransform(p, [paraStart, paraStart + 0.16], [0, 1]);
-  const paraY = useTransform(p, [paraStart, paraStart + 0.16], [20, 0]);
-  const glowO = useTransform(p, [0.2, 0.42, 0.58], [0, 0.35, 0]);
-  const glowS = useTransform(p, [0.2, 0.58], [0.6, 1.7]);
+  // Eyebrow blastet zuerst rein
+  const eyeO = useTransform(p, [0.4, 0.54], [0, 1]);
+  const eyeScale = useTransform(p, [0.4, 0.54], [1.5, 1]);
+  const eyeBlur = useTransform(p, [0.4, 0.54], ["blur(8px)", "blur(0px)"]);
+  // Headline blastet aus der Mitte: übergroß + unscharf -> scharf
+  const hO = useTransform(p, [0.45, 0.66], [0, 1]);
+  const hScale = useTransform(p, [0.45, 0.66], [1.32, 1]);
+  const hBlur = useTransform(p, [0.45, 0.66], ["blur(20px)", "blur(0px)"]);
+  // Absatz danach
+  const paraO = useTransform(p, [0.7, 0.84], [0, 1]);
+  const paraY = useTransform(p, [0.7, 0.84], [22, 0]);
+  const paraBlur = useTransform(p, [0.7, 0.84], ["blur(6px)", "blur(0px)"]);
+  // Aufblitzender Glow im Moment der Explosion
+  const glowO = useTransform(p, [0.2, 0.44, 0.62], [0, 0.4, 0]);
+  const glowS = useTransform(p, [0.2, 0.62], [0.6, 1.8]);
 
   if (reduce) {
     return (
@@ -160,7 +147,7 @@ export function LogoShatterHeading({
           style={{
             background:
               "radial-gradient(closest-side, var(--accent) 0%, transparent 70%)",
-            filter: "blur(24px)",
+            filter: "blur(28px)",
             opacity: glowO,
             scale: glowS,
           }}
@@ -170,20 +157,32 @@ export function LogoShatterHeading({
         ))}
       </div>
 
-      {/* Text steigt aus den Bruchstücken */}
+      {/* Text blastet aus der Mitte heraus */}
       <motion.span
-        style={{ opacity: eyeO, y: eyeY, letterSpacing: eyeLS }}
+        style={{ opacity: eyeO, scale: eyeScale, filter: eyeBlur }}
         className="eyebrow block text-accent"
       >
         {eyebrow}
       </motion.span>
-      <h2 className="font-display mt-5 text-balance text-4xl font-extrabold leading-[1.02] text-foreground sm:text-5xl lg:text-6xl">
+      <motion.h2
+        style={{
+          opacity: hO,
+          scale: hScale,
+          filter: hBlur,
+          transformOrigin: "center",
+        }}
+        className="font-display mt-5 text-balance text-4xl font-extrabold leading-[1.02] text-foreground sm:text-5xl lg:text-6xl"
+      >
         {lines.map((line, i) => (
-          <Line key={i} p={p} text={line} index={i} />
+          <span key={i} className="block">
+            {line}
+          </span>
         ))}
-      </h2>
+      </motion.h2>
       {children != null && (
-        <motion.div style={{ opacity: paraO, y: paraY }}>{children}</motion.div>
+        <motion.div style={{ opacity: paraO, y: paraY, filter: paraBlur }}>
+          {children}
+        </motion.div>
       )}
     </div>
   );
