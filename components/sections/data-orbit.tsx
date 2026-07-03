@@ -87,6 +87,9 @@ export function DataOrbit() {
     [0.28, 0.52, 1, 1, 0.5],
   );
   const globeOpacity = useTransform(p, [0, 0.1, 0.86, 0.98], [0, 1, 1, 0]);
+  // Erde bleibt beim Aufziehen mittig (~16vh nach unten) und fährt erst nach
+  // oben in ihre Endposition, wenn der Text kommt (~0.55 -> 0.7).
+  const globeY = useTransform(p, [0.55, 0.7], ["16vh", "0vh"]);
   // Text erst, wenn die Erde voll ist: erst Eyebrow+Headline, dann der Absatz;
   // kurze Lesepause, dann zügiger Exit.
   const OUT: [number, number] = [0.88, 0.98];
@@ -122,7 +125,7 @@ export function DataOrbit() {
       <div className="sticky top-0 flex h-screen flex-col items-center justify-start gap-6 overflow-hidden border-t border-border px-6 pt-[12vh] sm:gap-8">
         {/* Erde – kommt klein rein und wächst mit dem Scroll */}
         <motion.div
-          style={{ scale, opacity: globeOpacity, willChange: "transform" }}
+          style={{ scale, y: globeY, opacity: globeOpacity, willChange: "transform" }}
           className="relative aspect-square w-[min(54vh,88vw)] shrink-0"
         >
           <GlobeCore />
