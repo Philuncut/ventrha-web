@@ -96,7 +96,7 @@ export function DataOrbit() {
   // Statische Variante bei reduzierter Bewegung.
   if (reduce) {
     return (
-      <section className="relative overflow-hidden border-y border-border py-24 sm:py-32">
+      <section className="relative overflow-hidden border-t border-border py-24 sm:py-32">
         <Container>
           <div className="mx-auto max-w-2xl text-center">
             <TextBlock />
@@ -115,7 +115,7 @@ export function DataOrbit() {
 
   return (
     <section ref={ref} className="relative h-[175vh]">
-      <div className="sticky top-0 flex h-screen flex-col items-center justify-start gap-6 overflow-hidden border-y border-border px-6 pt-[12vh] sm:gap-8">
+      <div className="sticky top-0 flex h-screen flex-col items-center justify-start gap-6 overflow-hidden border-t border-border px-6 pt-[12vh] sm:gap-8">
         {/* Erde – kommt klein rein und wächst mit dem Scroll */}
         <motion.div
           style={{ scale, opacity: globeOpacity, willChange: "transform" }}
