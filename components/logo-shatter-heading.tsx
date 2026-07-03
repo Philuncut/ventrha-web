@@ -95,9 +95,11 @@ export function LogoShatterHeading({
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
 
+  // Gepinnt: der Effekt wird über den Scroll gescrubbt, während Logo/Text
+  // mittig im Viewport stehen -> zusammengebautes Logo immer zentriert.
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start end", "center center"],
+    offset: ["start start", "end end"],
   });
   const p = useSpring(scrollYProgress, {
     stiffness: 90,
@@ -124,7 +126,9 @@ export function LogoShatterHeading({
 
   if (reduce) {
     return (
-      <div className={`relative mx-auto max-w-3xl text-center ${className}`}>
+      <div
+        className={`relative mx-auto max-w-3xl px-6 py-24 text-center sm:py-32 ${className}`}
+      >
         <span className="eyebrow block text-accent">{eyebrow}</span>
         <h2 className="font-display mt-5 text-balance text-4xl font-extrabold leading-[1.02] text-foreground sm:text-5xl lg:text-6xl">
           {lines.join(" ")}
@@ -135,12 +139,11 @@ export function LogoShatterHeading({
   }
 
   return (
-    <div
-      ref={ref}
-      className={`relative mx-auto max-w-3xl text-center ${className}`}
-    >
-      {/* Logo-Splitter-Bühne */}
-      <div className="relative mx-auto mb-10 h-64 w-64 sm:h-80 sm:w-80">
+    <section ref={ref} className={`relative h-[140vh] ${className}`}>
+      <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden px-6">
+        <div className="relative w-full max-w-3xl text-center">
+          {/* Logo-Splitter-Bühne */}
+          <div className="relative mx-auto mb-10 h-64 w-64 sm:h-80 sm:w-80">
         <motion.span
           aria-hidden
           className="pointer-events-none absolute inset-0 rounded-full"
@@ -179,11 +182,15 @@ export function LogoShatterHeading({
           </span>
         ))}
       </motion.h2>
-      {children != null && (
-        <motion.div style={{ opacity: paraO, y: paraY, filter: paraBlur }}>
-          {children}
-        </motion.div>
-      )}
-    </div>
+          {children != null && (
+            <motion.div
+              style={{ opacity: paraO, y: paraY, filter: paraBlur }}
+            >
+              {children}
+            </motion.div>
+          )}
+        </div>
+      </div>
+    </section>
   );
 }

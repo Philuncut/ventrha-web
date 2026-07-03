@@ -8,22 +8,19 @@ export function Features() {
   const [flagship, ...rest] = features;
 
   return (
-    <section
-      id="features"
-      className="relative border-b border-border py-24 sm:py-32"
-    >
-      <Container>
-        <LogoShatterHeading
-          eyebrow="Funktionen"
-          lines={["Alles für den Versand –", "in einer Software"]}
-        >
-          <p className="mt-6 text-pretty text-lg leading-8 text-muted sm:text-xl">
-            VENTRHA übernimmt die wiederkehrenden Handgriffe im Versand, damit du
-            dich um dein Geschäft kümmern kannst.
-          </p>
-        </LogoShatterHeading>
+    <section id="features" className="relative border-b border-border">
+      <LogoShatterHeading
+        eyebrow="Funktionen"
+        lines={["Alles für den Versand –", "in einer Software"]}
+      >
+        <p className="mt-6 text-pretty text-lg leading-8 text-muted sm:text-xl">
+          VENTRHA übernimmt die wiederkehrenden Handgriffe im Versand, damit du
+          dich um dein Geschäft kümmern kannst.
+        </p>
+      </LogoShatterHeading>
 
-        <Stagger className="mt-14 grid gap-4 sm:mt-20 sm:grid-cols-2">
+      <Container className="pb-24 sm:pb-32">
+        <Stagger className="grid gap-4 sm:grid-cols-2">
           {/* Flaggschiff – breit, mit Live-Routing */}
           <StaggerItem className="group relative overflow-hidden rounded-2xl border border-border bg-surface p-7 transition-colors hover:border-border-strong sm:col-span-2 sm:p-9">
             <div
