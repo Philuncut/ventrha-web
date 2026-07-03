@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 import {
   motion,
   useReducedMotion,
@@ -96,10 +96,23 @@ export function Hero() {
         >
           <motion.span
             variants={item}
-            className="inline-flex items-center gap-2.5 rounded-full border border-border-strong bg-surface/70 px-4 py-2 text-muted backdrop-blur"
+            className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_10px_2px_var(--accent)]" />
-            <span className="eyebrow">Labels. Zoll. Tracking. Automatisch.</span>
+            {["Labels", "Zoll", "Tracking", "Automatisch"].map((word, i) => (
+              <Fragment key={word}>
+                {i > 0 && (
+                  <span
+                    aria-hidden
+                    className="h-1 w-1 rounded-full bg-accent shadow-[0_0_8px_1px_var(--accent)]"
+                  />
+                )}
+                <span
+                  className={`eyebrow ${i === 3 ? "text-accent" : "text-muted"}`}
+                >
+                  {word}
+                </span>
+              </Fragment>
+            ))}
           </motion.span>
 
           <motion.h1
