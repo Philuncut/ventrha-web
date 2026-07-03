@@ -12,7 +12,7 @@ import {
 
 const COLS = 4;
 const ROWS = 4;
-const SPREAD = 96; // px, wie weit die Bruchstücke nach außen fliegen
+const SPREAD = 168; // px, wie weit die Bruchstücke nach außen fliegen
 
 // Kacheln des Logos vorberechnen: Rasterposition, Bildausschnitt, Flugvektor.
 const TILES = Array.from({ length: COLS * ROWS }, (_, i) => {
@@ -153,7 +153,7 @@ export function LogoShatterHeading({
       className={`relative mx-auto max-w-3xl text-center ${className}`}
     >
       {/* Logo-Splitter-Bühne */}
-      <div className="relative mx-auto mb-8 h-28 w-28 sm:h-36 sm:w-36">
+      <div className="relative mx-auto mb-10 h-64 w-64 sm:h-80 sm:w-80">
         <motion.span
           aria-hidden
           className="pointer-events-none absolute inset-0 rounded-full"
