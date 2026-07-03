@@ -99,7 +99,7 @@ export function Hero() {
             className="inline-flex items-center gap-2.5 rounded-full border border-border-strong bg-surface/70 px-4 py-2 text-muted backdrop-blur"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_10px_2px_var(--accent)]" />
-            <span className="eyebrow">Versandsoftware für Online-Händler</span>
+            <span className="eyebrow">Labels. Zoll. Tracking. Automatisch.</span>
           </motion.span>
 
           <motion.h1
