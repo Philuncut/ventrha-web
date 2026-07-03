@@ -92,8 +92,10 @@ export function Globe({ className = "" }: { className?: string }) {
     let mounted = true;
 
     function resize() {
-      const rect = canvas!.getBoundingClientRect();
-      size = Math.max(1, rect.width);
+      // clientWidth = unskalierte Layout-Breite (ignoriert CSS-transform: scale
+      // der Eltern). Sonst würde der Canvas beim Mount in der herunterskalierten
+      // Größe angelegt und beim Aufziehen unscharf hochskaliert.
+      size = Math.max(1, canvas!.clientWidth);
       dpr = Math.min(2, window.devicePixelRatio || 1);
       canvas!.width = Math.round(size * dpr);
       canvas!.height = Math.round(size * dpr);
