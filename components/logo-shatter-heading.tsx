@@ -43,16 +43,17 @@ function Shard({
   tile: Tile;
   logo: string;
 }) {
-  // Logo schon beim Reinscrollen sichtbar (Opacity 1), erst beim Zerbrechen weg.
-  const opacity = useTransform(p, [0, 0.38, 0.55], [1, 1, 0]);
-  const scale = useTransform(p, [0, 0.4, 0.55], [1, 1, 0.5]);
-  const x = useTransform(p, [0.3, 0.55], [0, tile.dx]);
-  const y = useTransform(p, [0.3, 0.55], [0, tile.dy]);
-  const rotate = useTransform(p, [0.3, 0.55], [0, tile.rot]);
+  // Logo schon beim Reinscrollen sichtbar; zerbricht ab dem Moment, in dem es
+  // ins Bild kommt (p läuft inkl. Einfahrt), voll weg bis zum Andocken (~0.71).
+  const opacity = useTransform(p, [0, 0.5, 0.7], [1, 1, 0]);
+  const scale = useTransform(p, [0, 0.52, 0.7], [1, 1, 0.5]);
+  const x = useTransform(p, [0.48, 0.7], [0, tile.dx]);
+  const y = useTransform(p, [0.48, 0.7], [0, tile.dy]);
+  const rotate = useTransform(p, [0.48, 0.7], [0, tile.rot]);
   // Beim Wegfliegen kräftig aufleuchten und nachglühen (Accent-Glow).
   const filter = useTransform(
     p,
-    [0.26, 0.4, 0.55],
+    [0.46, 0.58, 0.7],
     [
       "drop-shadow(0 0 0px rgba(96,165,250,0))",
       "drop-shadow(0 0 26px rgba(96,165,250,1))",
@@ -111,7 +112,7 @@ export function LogoShatterHeading({
   // mittig im Viewport stehen -> zusammengebautes Logo immer zentriert.
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end end"],
+    offset: ["start end", "end end"],
   });
   const p = useSpring(scrollYProgress, {
     stiffness: 90,
@@ -120,21 +121,21 @@ export function LogoShatterHeading({
     restDelta: 0.0005,
   });
 
-  // Eyebrow blastet zuerst rein
-  const eyeO = useTransform(p, [0.4, 0.54], [0, 1]);
-  const eyeScale = useTransform(p, [0.4, 0.54], [1.5, 1]);
-  const eyeBlur = useTransform(p, [0.4, 0.54], ["blur(8px)", "blur(0px)"]);
+  // Text blastet in der zentrierten (angedockten) Phase, nach dem Zerbrechen.
+  const eyeO = useTransform(p, [0.72, 0.82], [0, 1]);
+  const eyeScale = useTransform(p, [0.72, 0.82], [1.5, 1]);
+  const eyeBlur = useTransform(p, [0.72, 0.82], ["blur(8px)", "blur(0px)"]);
   // Headline blastet aus der Mitte: übergroß + unscharf -> scharf
-  const hO = useTransform(p, [0.45, 0.66], [0, 1]);
-  const hScale = useTransform(p, [0.45, 0.66], [1.32, 1]);
-  const hBlur = useTransform(p, [0.45, 0.66], ["blur(20px)", "blur(0px)"]);
+  const hO = useTransform(p, [0.76, 0.9], [0, 1]);
+  const hScale = useTransform(p, [0.76, 0.9], [1.32, 1]);
+  const hBlur = useTransform(p, [0.76, 0.9], ["blur(20px)", "blur(0px)"]);
   // Absatz danach
-  const paraO = useTransform(p, [0.7, 0.84], [0, 1]);
-  const paraY = useTransform(p, [0.7, 0.84], [22, 0]);
-  const paraBlur = useTransform(p, [0.7, 0.84], ["blur(6px)", "blur(0px)"]);
+  const paraO = useTransform(p, [0.9, 0.99], [0, 1]);
+  const paraY = useTransform(p, [0.9, 0.99], [22, 0]);
+  const paraBlur = useTransform(p, [0.9, 0.99], ["blur(6px)", "blur(0px)"]);
   // Aufblitzender Glow im Moment der Explosion
-  const glowO = useTransform(p, [0.2, 0.44, 0.62], [0, 0.4, 0]);
-  const glowS = useTransform(p, [0.2, 0.62], [0.6, 1.8]);
+  const glowO = useTransform(p, [0.44, 0.58, 0.72], [0, 0.4, 0]);
+  const glowS = useTransform(p, [0.44, 0.72], [0.6, 1.8]);
 
   if (reduce) {
     return (
