@@ -96,23 +96,36 @@ export function Hero() {
         >
           <motion.span
             variants={item}
-            className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5"
+            className="relative inline-flex items-center gap-3 overflow-hidden py-1"
           >
             {["Labels", "Zoll", "Tracking", "Automatisch"].map((word, i) => (
               <Fragment key={word}>
                 {i > 0 && (
-                  <span
-                    aria-hidden
-                    className="h-1 w-1 rounded-full bg-accent shadow-[0_0_8px_1px_var(--accent)]"
-                  />
+                  <span aria-hidden className="h-3 w-px bg-white/15" />
                 )}
-                <span
-                  className={`eyebrow ${i === 3 ? "text-accent" : "text-muted"}`}
-                >
-                  {word}
-                </span>
+                <span className="eyebrow text-muted">{word}</span>
               </Fragment>
             ))}
+            {/* Sanfter Licht-Sweep, der langsam über die Zeile wandert */}
+            {!reduce && (
+              <motion.span
+                aria-hidden
+                className="pointer-events-none absolute inset-y-0 -inset-x-6"
+                style={{
+                  background:
+                    "linear-gradient(100deg, transparent 42%, rgba(196,236,255,0.55) 50%, transparent 58%)",
+                  mixBlendMode: "screen",
+                }}
+                initial={{ x: "-130%" }}
+                animate={{ x: "130%" }}
+                transition={{
+                  duration: 2.6,
+                  ease: "easeInOut",
+                  repeat: Infinity,
+                  repeatDelay: 3,
+                }}
+              />
+            )}
           </motion.span>
 
           <motion.h1
