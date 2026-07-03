@@ -1,5 +1,6 @@
 import { Container } from "@/components/container";
-import { Reveal, Stagger, StaggerItem } from "@/components/reveal";
+import { Stagger, StaggerItem } from "@/components/reveal";
+import { HeadingReveal } from "@/components/heading-reveal";
 import { CarrierFlow } from "@/components/carrier-flow";
 import { features, extras } from "@/lib/content";
 
@@ -12,17 +13,15 @@ export function Features() {
       className="relative border-b border-border py-24 sm:py-32"
     >
       <Container>
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <span className="eyebrow text-accent">Funktionen</span>
-          <h2 className="font-display mt-5 text-balance text-4xl font-extrabold leading-[1.02] text-foreground sm:text-5xl lg:text-6xl">
-            Alles für den Versand –<br className="hidden sm:block" /> in einer
-            Software
-          </h2>
+        <HeadingReveal
+          eyebrow="Funktionen"
+          lines={["Alles für den Versand –", "in einer Software"]}
+        >
           <p className="mt-6 text-pretty text-lg leading-8 text-muted sm:text-xl">
             VENTRHA übernimmt die wiederkehrenden Handgriffe im Versand, damit du
             dich um dein Geschäft kümmern kannst.
           </p>
-        </Reveal>
+        </HeadingReveal>
 
         <Stagger className="mt-14 grid gap-4 sm:mt-20 sm:grid-cols-2">
           {/* Flaggschiff – breit, mit Live-Routing */}
