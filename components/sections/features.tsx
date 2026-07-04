@@ -1,6 +1,6 @@
 import { Container } from "@/components/container";
 import { Stagger, StaggerItem } from "@/components/reveal";
-import { LogoShatterHeading } from "@/components/logo-shatter-heading";
+import { BrandReveal } from "@/components/brand-reveal";
 import { CarrierFlow } from "@/components/carrier-flow";
 import { features, extras } from "@/lib/content";
 
@@ -9,7 +9,7 @@ export function Features() {
 
   return (
     <section id="features" className="relative border-b border-border">
-      <LogoShatterHeading
+      <BrandReveal
         eyebrow="Funktionen"
         lines={["Alles für den Versand –", "in einer Software"]}
       >
@@ -17,7 +17,7 @@ export function Features() {
           VENTRHA übernimmt die wiederkehrenden Handgriffe im Versand, damit du
           dich um dein Geschäft kümmern kannst.
         </p>
-      </LogoShatterHeading>
+      </BrandReveal>
 
       <Container className="pb-24 sm:pb-32">
         <Stagger className="grid gap-4 sm:grid-cols-2">
