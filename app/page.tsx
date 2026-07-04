@@ -2,6 +2,7 @@ import { Hero } from "@/components/sections/hero";
 import { DataOrbit } from "@/components/sections/data-orbit";
 import { WorldSplit } from "@/components/sections/world-split";
 import { Features } from "@/components/sections/features";
+import { WarehouseBand } from "@/components/sections/warehouse-band";
 import { Showcase } from "@/components/sections/showcase";
 import { Contact } from "@/components/sections/contact";
 
@@ -12,6 +13,7 @@ export default function Home() {
       <DataOrbit />
       <WorldSplit />
       <Features />
+      <WarehouseBand />
       <Showcase />
       <Contact />
     </main>
