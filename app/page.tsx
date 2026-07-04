@@ -4,6 +4,7 @@ import { WorldSplit } from "@/components/sections/world-split";
 import { Features } from "@/components/sections/features";
 import { WarehouseBand } from "@/components/sections/warehouse-band";
 import { Showcase } from "@/components/sections/showcase";
+import { Pricing } from "@/components/sections/pricing";
 import { Contact } from "@/components/sections/contact";
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
       <Features />
       <WarehouseBand />
       <Showcase />
+      <Pricing />
       <Contact />
     </main>
   );
