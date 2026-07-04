@@ -144,16 +144,20 @@ export function Hero() {
             Versandlabel in einem Klick.
           </motion.p>
 
-          <motion.div
-            variants={item}
-            className="mt-10 flex flex-col gap-3 sm:flex-row"
-          >
-            <ButtonLink href="#kontakt" size="lg">
-              Interesse melden
-            </ButtonLink>
-            <ButtonLink href="#features" size="lg" variant="secondary">
-              Funktionen ansehen
-            </ButtonLink>
+          <motion.div variants={item} className="mt-10 flex flex-col items-center gap-4">
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <ButtonLink href="#kontakt" size="lg">
+                Jetzt starten
+              </ButtonLink>
+              <ButtonLink href="#features" size="lg" variant="secondary">
+                Funktionen ansehen
+              </ButtonLink>
+            </div>
+            <p className="text-sm text-muted">
+              Schon ab{" "}
+              <span className="font-semibold text-foreground">19,90 €</span> /
+              Monat
+            </p>
           </motion.div>
 
           <motion.div
