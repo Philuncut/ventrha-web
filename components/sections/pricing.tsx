@@ -50,7 +50,7 @@ function Check() {
 
 export function Pricing() {
   const reduce = useReducedMotion();
-  const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
+  const [billing, setBilling] = useState<"monthly" | "yearly">("yearly");
   const p = PRICE[billing];
 
   return (
