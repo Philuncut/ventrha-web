@@ -10,9 +10,9 @@ import { Reveal } from "@/components/reveal";
 const PRICE = {
   monthly: { amount: "19,90 €", unit: "/ Monat", note: "monatlich abgerechnet" },
   yearly: {
-    amount: "199 €",
+    amount: "191 €",
     unit: "/ Jahr",
-    note: "2 Monate geschenkt · entspricht 16,58 € / Monat",
+    note: "20 % gespart · entspricht 15,92 € / Monat",
   },
 } as const;
 
@@ -105,7 +105,7 @@ export function Pricing() {
                     : "bg-accent-soft text-accent"
                 }`}
               >
-                −2 Monate
+                −20 %
               </span>
             </button>
           </div>
