@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 
-const NODES = ["DHL", "GLS", "Post AT"];
+const NODES = ["DHL", "GLS", "Hermes", "+ mehr"];
 
 /**
  * Kleine „Live-Routing"-Visualisierung für die Flaggschiff-Karte: drei Carrier

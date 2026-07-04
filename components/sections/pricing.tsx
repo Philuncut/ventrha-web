@@ -18,7 +18,7 @@ const PRICE = {
 
 /** Alles, was im Plan enthalten ist. */
 const included = [
-  "Alle Carrier: DHL, GLS, Post AT",
+  "Alle Carrier: DHL, GLS, Hermes & mehr",
   "Automatische Zollformulare (CN22/CN23, Invoice)",
   "Multi-Shop-Anbindung (WooCommerce & mehr)",
   "Automatischer Label-Druck in einem Klick",

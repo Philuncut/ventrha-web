@@ -25,7 +25,7 @@ export const features: Feature[] = [
     title: "Multi-Carrier-Versand",
     description:
       "Ein Tool für alle Versanddienstleister. VENTRHA wählt den passenden Carrier je Bestellung automatisch anhand deiner Regeln.",
-    points: ["DHL Paket direkt", "GLS über SendDrop", "Post AT in Planung"],
+    points: ["DHL Paket direkt", "GLS & Hermes", "Und viele weitere Carrier"],
   },
   {
     icon: CustomsIcon,

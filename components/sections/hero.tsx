@@ -11,7 +11,7 @@ import {
 import { Container } from "@/components/container";
 import { ButtonLink } from "@/components/button";
 
-const worksWith = ["DHL", "GLS", "Post AT", "WooCommerce"];
+const worksWith = ["DHL", "GLS", "Hermes", "WooCommerce"];
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
