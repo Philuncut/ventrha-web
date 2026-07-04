@@ -43,8 +43,9 @@ function makeSprite(rgb: readonly number[], size: number) {
   const r = size / 2;
   const grad = g.createRadialGradient(r, r, 0, r, r, r);
   const [red, gr, bl] = rgb;
-  grad.addColorStop(0, `rgba(${red},${gr},${bl},1)`);
-  grad.addColorStop(0.3, `rgba(${red},${gr},${bl},0.7)`);
+  // Weicher, diffuser Kern -> Staub/Nebel statt harter Punkt.
+  grad.addColorStop(0, `rgba(${red},${gr},${bl},0.85)`);
+  grad.addColorStop(0.35, `rgba(${red},${gr},${bl},0.35)`);
   grad.addColorStop(1, `rgba(${red},${gr},${bl},0)`);
   g.fillStyle = grad;
   g.fillRect(0, 0, size, size);
@@ -143,7 +144,7 @@ export function LogoShatterHeading({
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       const small = W < 640;
-      const maxN = small ? 1000 : 1600;
+      const maxN = small ? 1400 : 2300; // feinkörniger -> sandig/staubig
 
       // ── Logo-Punkte (aus dem scharfen Bitmap) ──────────────────────
       logoSize = clamp(Math.min(W * 0.5, 300), 160, 300);
@@ -208,17 +209,19 @@ export function LogoShatterHeading({
 
       // ── Partikel bilden (inkl. Explosionsziel nach außen/unten) ────
       const minWH = Math.min(W, H);
+      // Jitter bricht das Sampling-Raster auf -> organische Sand-/Staubwolke.
+      const jit = (px: number) => (Math.random() - 0.5) * 2 * px;
       particles = srcPts.map((s, i) => {
         const d = dstPts[i];
         const ang = Math.random() * Math.PI * 2;
         const dist = minWH * (0.28 + Math.random() * 0.42);
         return {
-          sx: s.x,
-          sy: s.y,
+          sx: s.x + jit(1.8),
+          sy: s.y + jit(1.8),
           ex: logoCx + Math.cos(ang) * dist,
           ey: logoCy + Math.sin(ang) * dist * 0.7 + minWH * 0.12,
-          dx: d.x,
-          dy: d.y,
+          dx: d.x + jit(1.3),
+          dy: d.y + jit(1.3),
           seed: Math.random(),
           cool: Math.random() < 0.5,
         };
@@ -241,13 +244,13 @@ export function LogoShatterHeading({
       ctx!.clearRect(0, 0, W, H);
 
       // Handoff: Canvas raus, scharfer DOM-Text rein.
-      const canvasO = 1 - frac(P, 0.88, 1);
+      const canvasO = 1 - frac(P, 0.84, 1);
       canvas!.style.opacity = String(canvasO);
-      textEl!.style.opacity = String(frac(P, 0.85, 0.98));
+      textEl!.style.opacity = String(frac(P, 0.8, 0.96));
       if (canvasO <= 0.001) return;
 
       // Glow hinter dem noch zusammenhängenden Logo.
-      const coreO = (1 - frac(P, 0.42, 0.62)) * 0.5;
+      const coreO = (1 - frac(P, 0.32, 0.55)) * 0.5;
       if (coreO > 0.01) {
         const rG = Math.min(W * 0.36, 260);
         const g = ctx!.createRadialGradient(logoCx, logoCy, 0, logoCx, logoCy, rG);
@@ -258,7 +261,7 @@ export function LogoShatterHeading({
       }
 
       // Scharfes Logo-Bitmap im Ruhezustand – löst sich beim Explodieren auf.
-      const logoO = 1 - frac(P, 0.4, 0.52);
+      const logoO = 1 - frac(P, 0.3, 0.44);
       if (logoImg && logoO > 0.01) {
         ctx!.globalAlpha = logoO;
         ctx!.drawImage(logoImg, lx0, ly0, logoSize, logoSize);
@@ -266,18 +269,18 @@ export function LogoShatterHeading({
       }
 
       if (!sprites) return;
-      const partLayer = frac(P, 0.4, 0.5); // Partikel erscheinen zur Explosion
+      const partLayer = frac(P, 0.3, 0.42); // Partikel erscheinen zur Explosion
 
       ctx!.globalCompositeOperation = "lighter";
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
         const st = p.seed * 0.05;
-        const e = smooth(frac(P, 0.42 + st, 0.58 + st)); // Explosion
-        const c = smooth(frac(P, 0.58 + st, 0.82 + st)); // Sammeln zum Text
+        const e = smooth(frac(P, 0.32 + st, 0.5 + st)); // Explosion
+        const c = smooth(frac(P, 0.5 + st, 0.78 + st)); // Sammeln zum Text
 
         let x: number;
         let y: number;
-        if (P < 0.58 + st) {
+        if (P < 0.5 + st) {
           x = lerp(p.sx, p.ex, e);
           y = lerp(p.sy, p.ey, e);
         } else {
@@ -286,11 +289,16 @@ export function LogoShatterHeading({
         }
 
         const flight = e * (1 - c); // 0 in Ruhe, 1 mitten im Flug
+        // Turbulenz im Flug -> wirbelnder Staub; am Ziel/Ruhe = 0.
+        const turb = flight * 9;
+        x += Math.sin(p.seed * 6.283 + P * 9) * turb;
+        y += Math.cos(p.seed * 6.283 + P * 7) * turb * 0.7;
+
         const sprite =
           flight > 0.15 ? (p.cool ? sprites.cyan : sprites.blue) : sprites.fg;
-        // Ruhende Partikel etwas größer -> Text/Logo wirken dichter, weniger dottig.
-        const size = (3.2 + flight * 4) * (0.85 + p.seed * 0.35);
-        ctx!.globalAlpha = partLayer * (0.6 + 0.4 * (1 - flight));
+        // Feine Körnung mit breiter Größenstreuung -> Sand/Staub.
+        const size = (2 + flight * 3.5) * (0.55 + p.seed * 1.0);
+        ctx!.globalAlpha = partLayer * (0.55 + 0.45 * (1 - flight));
         ctx!.drawImage(sprite, x - size / 2, y - size / 2, size, size);
       }
       ctx!.globalAlpha = 1;
@@ -345,7 +353,7 @@ export function LogoShatterHeading({
   }
 
   return (
-    <section ref={sectionRef} className={`relative h-[200vh] ${className}`}>
+    <section ref={sectionRef} className={`relative h-[150vh] ${className}`}>
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* Partikel-Bühne */}
         <canvas
