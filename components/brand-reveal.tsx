@@ -8,7 +8,6 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import Image from "next/image";
 import { Container } from "@/components/container";
 
 /**
@@ -62,36 +61,49 @@ export function BrandReveal({
       ref={ref}
       className={`relative min-h-[78vw] overflow-x-clip py-16 sm:min-h-[56vh] sm:py-24 ${className}`}
     >
-      {/* Großes Logo – ragt rechts ins Bild, wächst mit dem Scroll */}
+      {/* Großes Logo – ragt rechts ins Bild, wächst mit dem Scroll.
+          Als leuchtende Akzent-Silhouette (wie die Weltkugel), halbtransparent,
+          damit es hinter dem Text als Glow-Backdrop liegen darf statt zu decken. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute right-0 top-1/2 aspect-square w-[76vw] max-w-[540px] -translate-y-1/2 translate-x-[14%] sm:w-[44vw]"
+        className="pointer-events-none absolute right-0 top-1/2 aspect-square w-[60vw] max-w-[440px] -translate-y-1/2 translate-x-[26%] sm:w-[42vw] sm:translate-x-[16%]"
       >
         <motion.div
           style={reduce ? undefined : { scale: gScale, x: gX, opacity: gOpacity }}
           className="relative h-full w-full"
         >
+          {/* Weicher Glow-Kern dahinter */}
           <div
-            className="absolute inset-[-22%] rounded-full"
+            className="absolute inset-[-20%] rounded-full"
             style={{
               background: "var(--gradient-accent)",
-              filter: "blur(90px)",
-              opacity: 0.38,
+              filter: "blur(80px)",
+              opacity: 0.32,
             }}
           />
-          <Image
-            src={logo}
-            alt=""
-            fill
-            sizes="(min-width: 640px) 44vw, 76vw"
-            className="relative object-contain"
+          {/* Logo-Form, gefüllt mit dem Marken-Gradient (blau -> cyan) */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "var(--gradient-accent)",
+              opacity: 0.72,
+              WebkitMaskImage: `url(${logo})`,
+              maskImage: `url(${logo})`,
+              WebkitMaskRepeat: "no-repeat",
+              maskRepeat: "no-repeat",
+              WebkitMaskPosition: "center",
+              maskPosition: "center",
+              WebkitMaskSize: "contain",
+              maskSize: "contain",
+              filter: "drop-shadow(0 0 26px rgba(59,130,246,0.5))",
+            }}
           />
         </motion.div>
       </div>
 
       {/* Text – links, kommt gestaffelt beim Scrollen */}
       <Container className="relative flex items-center">
-        <div className="w-[62%] sm:w-auto sm:max-w-lg">
+        <div className="relative w-[58%] sm:w-auto sm:max-w-lg">
           <motion.span
             style={reduce ? undefined : { opacity: eyO, y: eyY }}
             className="eyebrow block text-accent"
